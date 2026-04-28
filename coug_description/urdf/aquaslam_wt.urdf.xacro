@@ -26,7 +26,7 @@
   <joint name="imu_joint" type="fixed">
     <parent link="base_link"/>
     <child link="imu_link"/>
-    <origin xyz="-0.211573 -0.054312 -0.098612" rpy="-1.548854 0.012316 3.122423"/>
+    <origin xyz="-0.229713 -0.064365 -0.141380" rpy="-2.622725 -1.474140 -2.101867"/>
   </joint>
 
   <!-- Depth Link -->
@@ -34,7 +34,7 @@
   <joint name="depth_joint" type="fixed">
     <parent link="base_link"/>
     <child link="depth_link"/>
-    <origin xyz="-0.211573 -0.054312 -0.098612" rpy="0 0 0"/>
+    <origin xyz="-0.229713 -0.064365 -0.141380" rpy="0 0 0"/>
   </joint>
 
   <!-- DVL Link -->
@@ -42,7 +42,7 @@
   <joint name="dvl_joint" type="fixed">
     <parent link="base_link"/>
     <child link="dvl_link"/>
-    <origin xyz="-0.132345 0.032086 -0.240100" rpy="${pi} 0 0"/>
+    <origin xyz="-0.153627 0.011795 -0.195926" rpy="-3.120647 -0.023655 0.052659"/>
   </joint>
 
 </robot>
