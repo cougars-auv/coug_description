@@ -14,20 +14,8 @@ setup(
         (os.path.join("share", package_name, "launch"), glob("launch/*.launch.py")),
         (os.path.join("share", package_name, "urdf"), glob("urdf/*.xacro")),
         (
-            os.path.join("share", package_name, "urdf/bluerov2_holoocean"),
-            glob("urdf/bluerov2_holoocean/*.*"),
-        ),
-        (
-            os.path.join("share", package_name, "urdf/bluerov2_holoocean/meshes"),
-            glob("urdf/bluerov2_holoocean/meshes/*.*"),
-        ),
-        (
-            os.path.join("share", package_name, "urdf/bluerov2"),
-            glob("urdf/bluerov2/*.*"),
-        ),
-        (
-            os.path.join("share", package_name, "urdf/bluerov2/meshes"),
-            glob("urdf/bluerov2/meshes/*.*"),
+            os.path.join("share", package_name, "urdf/meshes"),
+            glob("urdf/meshes/*.*"),
         ),
     ],
     install_requires=["setuptools"],

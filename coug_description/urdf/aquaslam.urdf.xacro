@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="bluerov2">
+
+  <!--
+  @file bluerov2.urdf.xacro
+  @brief URDF description for the AQUA-SLAM BlueROV2.
+  @author Nelson Durrant
+  @date Jan 2026
+  -->
+
+  <xacro:property name="mass" value="9.5" />
+  <xacro:property name="ixx" value="0.16" />
+  <xacro:property name="iyy" value="0.17" />
+  <xacro:property name="izz" value="0.12" />
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://coug_description/urdf/meshes/bluerov2.dae" scale="0.025 0.025 0.025"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <!-- IMU Link -->
+  <link name="imu_link"/>
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="-0.211573 -0.054312 -0.098612" rpy="-1.548854 0.012316 3.122423"/>
+  </joint>
+
+  <!-- Depth Link -->
+  <link name="depth_link"/>
+  <joint name="depth_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="depth_link"/>
+    <origin xyz="-0.211573 -0.054312 -0.098612" rpy="0 0 0"/>
+  </joint>
+
+  <!-- DVL Link -->
+  <link name="dvl_link"/>
+  <joint name="dvl_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="dvl_link"/>
+    <origin xyz="-0.132345 0.032086 -0.240100" rpy="${pi} 0 0"/>
+  </joint>
+
+</robot>
