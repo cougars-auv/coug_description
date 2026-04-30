@@ -133,6 +133,13 @@
   </joint>
   <link name="com_link"/>
 
+  <joint name="gps_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="gps_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="gps_link"/>
+
   <!-- IMUSocket -->
   <joint name="imu_joint" type="fixed">
     <parent link="com_link"/>

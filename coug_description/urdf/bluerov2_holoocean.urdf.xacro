@@ -32,6 +32,20 @@
   </joint>
   <link name="com_link"/>
 
+  <joint name="gps_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="gps_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="gps_link"/>
+
+  <joint name="modem_joint" type="fixed">
+    <parent link="com_link"/>
+    <child link="modem_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="modem_link"/>
+
   <!-- IMUSocket -->
   <joint name="imu_joint" type="fixed">
     <parent link="com_link"/>
@@ -72,14 +86,7 @@
   </joint>
   <link name="sonar_link"/>
 
-  <!-- Fixes for matching CougUV URDF -->
-  <joint name="modem_joint" type="fixed">
-    <parent link="com_link"/>
-    <child link="modem_link"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
-  </joint>
-  <link name="modem_link"/>
-
+  <!-- Fix for matching CougUV URDF -->
   <joint name="truth_joint" type="fixed">
     <parent link="base_link"/>
     <child link="truth_link"/>
