@@ -123,6 +123,8 @@
   <xacro:fin_macro prefix="left"  rpy="${pi*2/3} 0 0"/>
   <xacro:fin_macro prefix="right" rpy="${-pi*2/3} 0 0"/>
 
+  <!-- TODO: Update the offsets on these -->
+
   <!-- GPS Link -->
   <joint name="gps_joint" type="fixed">
     <parent link="base_link"/>
