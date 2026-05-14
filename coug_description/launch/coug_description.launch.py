@@ -82,7 +82,10 @@ def generate_launch_description() -> LaunchDescription:
                 condition=IfCondition(
                     OrSubstitution(
                         NotSubstitution(use_sim_time),
-                        EqualsSubstitution(auv_ns, "coug2"),
+                        OrSubstitution(
+                            EqualsSubstitution(auv_ns, "coug2_dvl"),
+                            EqualsSubstitution(auv_ns, "coug2_ekf"),
+                        ),
                     )
                 ),
             ),
