@@ -17,13 +17,16 @@ from launch_ros.actions import Node
 from launch.substitutions import (
     PathJoinSubstitution,
     Command,
+    EqualsSubstitution,
     LaunchConfiguration,
+    NotSubstitution,
+    OrSubstitution,
     PythonExpression,
 )
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.parameter_descriptions import ParameterValue
 from launch.actions import DeclareLaunchArgument
-from launch.conditions import UnlessCondition
+from launch.conditions import IfCondition
 
 
 def generate_launch_description() -> LaunchDescription:
@@ -76,7 +79,12 @@ def generate_launch_description() -> LaunchDescription:
                 executable="joint_state_publisher",
                 name="joint_state_publisher",
                 parameters=[{"use_sim_time": use_sim_time}],
-                condition=UnlessCondition(use_sim_time),
+                condition=IfCondition(
+                    OrSubstitution(
+                        NotSubstitution(use_sim_time),
+                        EqualsSubstitution(auv_ns, "coug2"),
+                    )
+                ),
             ),
         ]
     )
