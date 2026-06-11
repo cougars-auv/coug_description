@@ -52,9 +52,23 @@ def launch_setup(context, *args, **kwargs) -> list:
     )
 
     config_dir = os.environ.get("CONFIG_DIR", "")
-    agent_params_path = os.path.join(config_dir, f"{auv_ns_str}_params.yaml")
 
     urdf_filename = "couguv_holoocean.urdf.xacro"
+
+    fleet_params_path = os.path.join(
+        config_dir, "fleet", "coug_description_params.yaml"
+    )
+    if os.path.isfile(fleet_params_path):
+        with open(fleet_params_path) as f:
+            fleet_config = yaml.safe_load(f) or {}
+        fleet_desc = (
+            fleet_config.get("/**", {})
+            .get("coug_description_launch", {})
+            .get("ros__parameters", {})
+        )
+        urdf_filename = fleet_desc.get("urdf_file", urdf_filename)
+
+    agent_params_path = os.path.join(config_dir, f"{auv_ns_str}_params.yaml")
     if os.path.isfile(agent_params_path):
         with open(agent_params_path) as f:
             agent_params = yaml.safe_load(f) or {}
