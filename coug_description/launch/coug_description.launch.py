@@ -12,30 +12,104 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+import yaml
+from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node
+from launch.conditions import IfCondition
 from launch.substitutions import (
-    PathJoinSubstitution,
     Command,
+    EnvironmentVariable,
     EqualsSubstitution,
     LaunchConfiguration,
-    NotSubstitution,
+    NotEqualsSubstitution,
     OrSubstitution,
+    PathJoinSubstitution,
     PythonExpression,
 )
-from launch_ros.substitutions import FindPackageShare
 from launch_ros.parameter_descriptions import ParameterValue
-from launch.actions import DeclareLaunchArgument
-from launch.conditions import IfCondition
+from launch.actions import DeclareLaunchArgument, OpaqueFunction
+
+
+def launch_setup(context, *args, **kwargs) -> list:
+    use_sim_time = LaunchConfiguration("use_sim_time")
+    auv_ns = LaunchConfiguration("auv_ns")
+    auv_ns_str = auv_ns.perform(context)
+
+    fleet_params = PathJoinSubstitution(
+        [
+            EnvironmentVariable("CONFIG_DIR"),
+            "fleet",
+            "coug_description_params.yaml",
+        ]
+    )
+    auv_params = PathJoinSubstitution(
+        [
+            EnvironmentVariable("CONFIG_DIR"),
+            PythonExpression(["'", auv_ns, "' + '_params.yaml'"]),
+        ]
+    )
+
+    config_dir = os.environ.get("CONFIG_DIR", "")
+    agent_params_path = os.path.join(config_dir, f"{auv_ns_str}_params.yaml")
+
+    urdf_filename = "couguv_holoocean.urdf.xacro"
+    if os.path.isfile(agent_params_path):
+        with open(agent_params_path) as f:
+            agent_params = yaml.safe_load(f) or {}
+        ns_params = agent_params.get(f"/{auv_ns_str}", {})
+        desc_params = ns_params.get("coug_description_launch", {}).get(
+            "ros__parameters", {}
+        )
+        urdf_filename = desc_params.get("urdf_file", urdf_filename)
+
+    coug_description_dir = get_package_share_directory("coug_description")
+    urdf_file = os.path.join(coug_description_dir, "urdf", urdf_filename)
+
+    frame_prefix = PythonExpression(["'", auv_ns, "/' if '", auv_ns, "' != '' else ''"])
+
+    return [
+        Node(
+            package="robot_state_publisher",
+            executable="robot_state_publisher",
+            name="robot_state_publisher",
+            parameters=[
+                fleet_params,
+                auv_params,
+                {
+                    "robot_description": ParameterValue(
+                        Command(["xacro ", urdf_file]),
+                        value_type=str,
+                    ),
+                    "use_sim_time": use_sim_time,
+                    "frame_prefix": frame_prefix,
+                },
+            ],
+        ),
+        Node(
+            package="joint_state_publisher",
+            executable="joint_state_publisher",
+            name="joint_state_publisher",
+            parameters=[
+                fleet_params,
+                auv_params,
+                {"use_sim_time": use_sim_time},
+            ],
+            condition=IfCondition(
+                OrSubstitution(
+                    NotEqualsSubstitution(use_sim_time, "true"),
+                    OrSubstitution(
+                        EqualsSubstitution(auv_ns, "coug2_dvldr"),
+                        EqualsSubstitution(auv_ns, "coug2_ekf"),
+                    ),
+                )
+            ),
+        ),
+    ]
 
 
 def generate_launch_description() -> LaunchDescription:
-
-    use_sim_time = LaunchConfiguration("use_sim_time")
-    urdf_file = LaunchConfiguration("urdf_file")
-    auv_ns = LaunchConfiguration("auv_ns")
-    frame_prefix = PythonExpression(["'", auv_ns, "/' if '", auv_ns, "' != '' else ''"])
-
     return LaunchDescription(
         [
             DeclareLaunchArgument(
@@ -44,50 +118,10 @@ def generate_launch_description() -> LaunchDescription:
                 description="Use simulation/rosbag clock if true",
             ),
             DeclareLaunchArgument(
-                "urdf_file",
-                default_value=PathJoinSubstitution(
-                    [
-                        FindPackageShare("coug_description"),
-                        "urdf",
-                        "couguv_holoocean.urdf.xacro",
-                    ]
-                ),
-                description="URDF or Xacro file to load",
-            ),
-            DeclareLaunchArgument(
                 "auv_ns",
                 default_value="auv0",
                 description="Namespace for the AUV (e.g. auv0)",
             ),
-            Node(
-                package="robot_state_publisher",
-                executable="robot_state_publisher",
-                name="robot_state_publisher",
-                parameters=[
-                    {
-                        "robot_description": ParameterValue(
-                            Command(["xacro ", urdf_file]),
-                            value_type=str,
-                        ),
-                        "use_sim_time": use_sim_time,
-                        "frame_prefix": frame_prefix,
-                    }
-                ],
-            ),
-            Node(
-                package="joint_state_publisher",
-                executable="joint_state_publisher",
-                name="joint_state_publisher",
-                parameters=[{"use_sim_time": use_sim_time}],
-                condition=IfCondition(
-                    OrSubstitution(
-                        NotSubstitution(use_sim_time),
-                        OrSubstitution(
-                            EqualsSubstitution(auv_ns, "coug2_dvldr"),
-                            EqualsSubstitution(auv_ns, "coug2_ekf"),
-                        ),
-                    )
-                ),
-            ),
+            OpaqueFunction(function=launch_setup),
         ]
     )
