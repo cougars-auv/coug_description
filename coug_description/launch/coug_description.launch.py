@@ -53,30 +53,25 @@ def launch_setup(context, *args, **kwargs) -> list:
 
     config_dir = os.environ.get("CONFIG_DIR", "")
 
-    urdf_filename = "couguv_holoocean.urdf.xacro"
+    def load_launch_params(path, top_key):
+        if not os.path.isfile(path):
+            return {}
+        with open(path) as f:
+            config = yaml.safe_load(f) or {}
+        return ((config.get(top_key) or {}).get("coug_description_launch") or {}).get(
+            "ros__parameters"
+        ) or {}
 
-    fleet_params_path = os.path.join(
-        config_dir, "fleet", "coug_description_params.yaml"
+    fleet_defaults = load_launch_params(
+        os.path.join(config_dir, "fleet", "coug_description_params.yaml"), "/**"
     )
-    if os.path.isfile(fleet_params_path):
-        with open(fleet_params_path) as f:
-            fleet_config = yaml.safe_load(f) or {}
-        fleet_desc = (
-            fleet_config.get("/**", {})
-            .get("coug_description_launch", {})
-            .get("ros__parameters", {})
-        )
-        urdf_filename = fleet_desc.get("urdf_file", urdf_filename)
-
-    agent_params_path = os.path.join(config_dir, f"{auv_ns_str}_params.yaml")
-    if os.path.isfile(agent_params_path):
-        with open(agent_params_path) as f:
-            agent_params = yaml.safe_load(f) or {}
-        ns_params = agent_params.get(f"/{auv_ns_str}", {})
-        desc_params = ns_params.get("coug_description_launch", {}).get(
-            "ros__parameters", {}
-        )
-        urdf_filename = desc_params.get("urdf_file", urdf_filename)
+    agent_params = load_launch_params(
+        os.path.join(config_dir, f"{auv_ns_str}_params.yaml"), f"/{auv_ns_str}"
+    )
+    urdf_filename = agent_params.get(
+        "urdf_file",
+        fleet_defaults.get("urdf_file", "couguv_holoocean.urdf.xacro"),
+    )
 
     coug_description_dir = get_package_share_directory("coug_description")
     urdf_file = os.path.join(coug_description_dir, "urdf", urdf_filename)
