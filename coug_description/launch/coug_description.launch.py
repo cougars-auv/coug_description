@@ -37,6 +37,7 @@ def launch_setup(context, *args, **kwargs) -> list:
     auv_ns = LaunchConfiguration("auv_ns")
     auv_ns_str = auv_ns.perform(context)
 
+    coug_description_dir = get_package_share_directory("coug_description")
     fleet_params = PathJoinSubstitution(
         [
             EnvironmentVariable("CONFIG_DIR"),
@@ -72,8 +73,6 @@ def launch_setup(context, *args, **kwargs) -> list:
         "urdf_file",
         fleet_defaults.get("urdf_file", "couguv_holoocean.urdf.xacro"),
     )
-
-    coug_description_dir = get_package_share_directory("coug_description")
     urdf_file = os.path.join(coug_description_dir, "urdf", urdf_filename)
 
     frame_prefix = PythonExpression(["'", auv_ns, "/' if '", auv_ns, "' != '' else ''"])
