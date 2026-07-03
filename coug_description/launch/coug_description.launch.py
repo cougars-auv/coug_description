@@ -107,10 +107,7 @@ def launch_setup(context, *args, **kwargs) -> list:
             condition=IfCondition(
                 OrSubstitution(
                     NotEqualsSubstitution(use_sim_time, "true"),
-                    OrSubstitution(
-                        EqualsSubstitution(auv_ns, "coug2_dvldr"),
-                        EqualsSubstitution(auv_ns, "coug2_ekf"),
-                    ),
+                    EqualsSubstitution(auv_ns, "coug2"),
                 )
             ),
         ),
