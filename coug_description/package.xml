@@ -3,7 +3,7 @@
 <package format="3">
   <name>coug_description</name>
   <version>0.0.0</version>
-  <description>URDF files for the CougUV</description>
+  <description>CoUGARs URDF models and meshes.</description>
   <maintainer email="snelsond@byu.edu">snelsondurrant</maintainer>
   <license>Apache-2.0</license>
 
