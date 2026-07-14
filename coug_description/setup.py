@@ -25,6 +25,7 @@ setup(
     maintainer_email="snelsond@byu.edu",
     description="CoUGARs URDF models and meshes.",
     license="Apache-2.0",
+    url="https://github.com/cougars-auv/coug_description",
     extras_require={
         "test": [
             "pytest",
