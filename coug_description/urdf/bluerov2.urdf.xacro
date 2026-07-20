@@ -21,6 +21,8 @@
     </visual>
   </link>
 
+  <!-- TODO: Add sonar from Braden's URDF, move COM to realistic location -->
+
   <!-- IMU Link -->
   <link name="imu_link"/>
   <joint name="imu_joint" type="fixed">
