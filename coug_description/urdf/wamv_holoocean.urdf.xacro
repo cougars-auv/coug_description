@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="wamv">
+
+  <!--
+  @file wamv_holoocean.urdf.xacro
+  @brief URDF description for the WAM-V in HoloOcean.
+  @author Nelson Durrant
+  @date July 2026
+  -->
+
+  <xacro:property name="mass" value="9.5" />
+  <xacro:property name="ixx" value="0.16" />
+  <xacro:property name="iyy" value="0.17" />
+  <xacro:property name="izz" value="0.12" />
+
+  <!-- Main WAM-V body -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://coug_description/urdf/meshes/wamv/WAM-V-Base.dae"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <xacro:macro name="engine" params="prefix y">
+    <joint name="${prefix}_engine_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="${prefix}_engine_link"/>
+      <origin xyz="-2.373776 ${y} 0.318237" rpy="0 0 0"/>
+    </joint>
+    <link name="${prefix}_engine_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://coug_description/urdf/meshes/wamv/engine.dae"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <joint name="${prefix}_propeller_joint" type="fixed">
+      <parent link="${prefix}_engine_link"/>
+      <child link="${prefix}_propeller_link"/>
+      <origin xyz="-0.278156 0 -0.509371" rpy="0 0 0"/>
+    </joint>
+    <link name="${prefix}_propeller_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://coug_description/urdf/meshes/wamv/propeller.dae"/>
+        </geometry>
+      </visual>
+    </link>
+  </xacro:macro>
+
+  <xacro:engine prefix="left"  y="1.027135"/>
+  <xacro:engine prefix="right" y="-1.027135"/>
+
+  <!-- NOTE: These are exact HoloOcean socket locations as of 2.0.1 -->
+
+  <!-- Platform -->
+  <joint name="com_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="com_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="com_link"/>
+
+  <joint name="gps_joint" type="fixed">
+    <parent link="com_link"/>
+    <child link="gps_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="gps_link"/>
+
+  <joint name="imu_joint" type="fixed">
+    <parent link="com_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="imu_link"/>
+
+  <joint name="depth_joint" type="fixed">
+    <parent link="com_link"/>
+    <child link="depth_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="depth_link"/>
+
+  <!-- Payload -->
+  <joint name="dvl_joint" type="fixed">
+    <parent link="com_link"/>
+    <child link="dvl_link"/>
+    <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
+  </joint>
+  <link name="dvl_link"/>
+
+  <joint name="modem_joint" type="fixed">
+    <parent link="com_link"/>
+    <child link="modem_link"/>
+    <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
+  </joint>
+  <link name="modem_link"/>
+
+  <!-- Fix for matching CougUV URDF -->
+  <joint name="truth_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="truth_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="truth_link"/>
+
+</robot>

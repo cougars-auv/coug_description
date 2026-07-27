@@ -16,10 +16,35 @@
   <link name="base_link">
     <visual>
       <geometry>
-        <mesh filename="package://coug_description/urdf/meshes/bluerov2.dae" scale="0.025 0.025 0.025"/>
+        <mesh filename="package://coug_description/urdf/meshes/bluerov2/bluerov2.dae" scale="0.025 0.025 0.025"/>
       </geometry>
     </visual>
   </link>
+
+  <xacro:macro name="thruster" params="name xyz rpy mesh vis_rpy">
+    <joint name="${name}_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="${name}_link"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+    </joint>
+    <link name="${name}_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="${vis_rpy}"/>
+        <geometry>
+          <mesh filename="package://coug_description/urdf/meshes/bluerov2/${mesh}"/>
+        </geometry>
+      </visual>
+    </link>
+  </xacro:macro>
+
+  <xacro:thruster name="thruster1" xyz="0.14 -0.092 0.0"   rpy="-1.571 1.571 -0.785" mesh="t200_ccw_prop.dae" vis_rpy="-1.571 0 0"/>
+  <xacro:thruster name="thruster2" xyz="0.14 0.092 0.0"    rpy="-1.571 1.571 -2.356" mesh="t200_ccw_prop.dae" vis_rpy="-1.571 0 0"/>
+  <xacro:thruster name="thruster3" xyz="-0.14 -0.092 0.0"  rpy="-1.571 1.571 0.785"  mesh="t200_cw_prop.dae"  vis_rpy="1.571 0 0"/>
+  <xacro:thruster name="thruster4" xyz="-0.14 0.092 0.0"   rpy="-1.571 1.571 2.356"  mesh="t200_cw_prop.dae"  vis_rpy="1.571 0 0"/>
+  <xacro:thruster name="thruster5" xyz="0.118 -0.215 0.064"  rpy="0 0 0" mesh="t200_ccw_prop.dae" vis_rpy="-1.571 0 1.571"/>
+  <xacro:thruster name="thruster6" xyz="0.118 0.215 0.064"   rpy="0 0 0" mesh="t200_cw_prop.dae"  vis_rpy="1.571 0 1.571"/>
+  <xacro:thruster name="thruster7" xyz="-0.118 -0.215 0.064" rpy="0 0 0" mesh="t200_cw_prop.dae"  vis_rpy="1.571 0 1.571"/>
+  <xacro:thruster name="thruster8" xyz="-0.118 0.215 0.064"  rpy="0 0 0" mesh="t200_ccw_prop.dae" vis_rpy="-1.571 0 1.571"/>
 
   <!-- IMU Link -->
   <link name="imu_link"/>

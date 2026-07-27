@@ -15,8 +15,12 @@ setup(
         (os.path.join("share", package_name, "launch"), glob("launch/*.launch.py")),
         (os.path.join("share", package_name, "urdf"), glob("urdf/*.xacro")),
         (
-            os.path.join("share", package_name, "urdf/meshes"),
-            glob("urdf/meshes/*.*"),
+            os.path.join("share", package_name, "urdf/meshes/bluerov2"),
+            glob("urdf/meshes/bluerov2/*.*"),
+        ),
+        (
+            os.path.join("share", package_name, "urdf/meshes/wamv"),
+            glob("urdf/meshes/wamv/*.*"),
         ),
     ],
     install_requires=["setuptools"],
