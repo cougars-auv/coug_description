@@ -47,7 +47,7 @@
   <xacro:thruster name="thruster7" xyz="-0.118 -0.215 0.064" rpy="0 0 0" mesh="t200_cw_prop.dae"  vis_rpy="1.571 0 1.571"/>
   <xacro:thruster name="thruster8" xyz="-0.118 0.215 0.064"  rpy="0 0 0" mesh="t200_ccw_prop.dae" vis_rpy="-1.571 0 1.571"/>
 
-  <!-- NOTE: These are exact HoloOcean socket locations as of 2.0.1 -->
+  <!-- NOTE: These are exact HoloOcean socket locations as of 2.4.0 -->
 
   <!-- COM -->
   <joint name="com_joint" type="fixed">
