@@ -77,14 +77,14 @@
   </joint>
   <link name="imu_link"/>
 
-  <joint name="depth_joint" type="fixed">
+  <!-- Payload -->
+   <joint name="depth_joint" type="fixed">
     <parent link="com_link"/>
     <child link="depth_link"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
   </joint>
   <link name="depth_link"/>
 
-  <!-- Payload -->
   <joint name="dvl_joint" type="fixed">
     <parent link="com_link"/>
     <child link="dvl_link"/>
