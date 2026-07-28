@@ -111,7 +111,7 @@
   </joint>
   <link name="sonar_link"/>
 
-  <!-- Fix for matching CougUV URDF -->
+  <!-- Fix for HoloOcean GT offset bug -->
   <joint name="truth_joint" type="fixed">
     <parent link="base_link"/>
     <child link="truth_link"/>

@@ -55,55 +55,48 @@
 
   <!-- NOTE: These are exact HoloOcean socket locations as of 2.0.1 -->
 
-  <!-- Platform -->
-  <joint name="com_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="com_link"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
-  </joint>
-  <link name="com_link"/>
-
-  <joint name="gps_joint" type="fixed">
-    <parent link="com_link"/>
-    <child link="gps_link"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
-  </joint>
-  <link name="gps_link"/>
-
-  <joint name="imu_joint" type="fixed">
-    <parent link="com_link"/>
-    <child link="imu_link"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
-  </joint>
-  <link name="imu_link"/>
-
   <!-- Payload -->
-   <joint name="depth_joint" type="fixed">
-    <parent link="com_link"/>
+  <joint name="depth_joint" type="fixed">
+    <parent link="base_link"/>
     <child link="depth_link"/>
     <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
   </joint>
   <link name="depth_link"/>
 
   <joint name="dvl_joint" type="fixed">
-    <parent link="com_link"/>
+    <parent link="base_link"/>
     <child link="dvl_link"/>
     <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
   </joint>
   <link name="dvl_link"/>
 
   <joint name="modem_joint" type="fixed">
-    <parent link="com_link"/>
+    <parent link="base_link"/>
     <child link="modem_link"/>
     <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
   </joint>
   <link name="modem_link"/>
 
-  <!-- Fix for matching CougUV URDF -->
+  <!-- Platform -->
+  <joint name="gps_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="gps_link"/>
+    <origin xyz="0.55 0 1.3" rpy="0 0 0"/>
+  </joint>
+  <link name="gps_link"/>
+
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0.55 0 1.3" rpy="0 0 0"/>
+  </joint>
+  <link name="imu_link"/>
+
+  <!-- Fix for HoloOcean GT offset bug -->
   <joint name="truth_joint" type="fixed">
     <parent link="base_link"/>
     <child link="truth_link"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <origin xyz="-0.55 0 0" rpy="0 0 0"/>
   </joint>
   <link name="truth_link"/>
 

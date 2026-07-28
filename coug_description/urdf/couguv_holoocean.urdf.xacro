@@ -172,7 +172,7 @@
   </joint>
   <link name="dvl_link"/>
 
-  <!-- Fix for HoloOcean COM offset bug -->
+  <!-- Fix for HoloOcean GT offset bug -->
   <joint name="truth_joint" type="fixed">
     <parent link="base_link"/>
     <child link="truth_link"/>
