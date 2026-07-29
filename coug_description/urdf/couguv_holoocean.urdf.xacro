@@ -144,7 +144,8 @@
   <joint name="imu_joint" type="fixed">
     <parent link="com_link"/>
     <child link="imu_link"/>
-    <origin xyz="0.475 0 -0.035" rpy="${pi} 0 0"/>
+    <!-- IMU pitched 180 deg in socket due to robot_localization gravity mishandling bug -->
+    <origin xyz="0.475 0 -0.035" rpy="0 0 0"/>
   </joint>
   <link name="imu_link"/>
 
