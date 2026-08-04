@@ -53,7 +53,7 @@
   <xacro:engine prefix="left"  y="1.027135"/>
   <xacro:engine prefix="right" y="-1.027135"/>
 
-  <!-- NOTE: These are exact HoloOcean socket locations as of 2.0.1 -->
+  <!-- NOTE: These are exact HoloOcean socket locations as of 2.4.0 -->
 
   <!-- Payload -->
   <joint name="depth_joint" type="fixed">
