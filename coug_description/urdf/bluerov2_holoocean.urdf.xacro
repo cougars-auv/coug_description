@@ -121,14 +121,6 @@
   </joint>
   <link name="sonar_link" />
 
-  <!-- Fix for HoloOcean GT offset bug -->
-  <joint name="truth_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="truth_link" />
-    <origin xyz="0 0 0" rpy="0 0 0" />
-  </joint>
-  <link name="truth_link" />
-
   <!-- Configured stereo camera poses -->
   <!-- IMPORTANT! In HoloOcean, cameras look along X, with Z up and Y left -->
   <!-- In ROS 2, cameras look along Z, with X right and Y down -->

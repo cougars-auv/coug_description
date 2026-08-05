@@ -92,12 +92,4 @@
   </joint>
   <link name="imu_link" />
 
-  <!-- Fix for HoloOcean GT offset bug -->
-  <joint name="truth_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="truth_link" />
-    <origin xyz="0 0 0" rpy="0 0 0" />
-  </joint>
-  <link name="truth_link" />
-
 </robot>
