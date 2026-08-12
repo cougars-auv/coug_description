@@ -122,7 +122,7 @@
   <link name="sonar_link" />
 
   <!-- Configured stereo camera poses -->
-  <!-- IMPORTANT! In HoloOcean, cameras look along X, with Z up and Y left -->
+  <!-- In HoloOcean, cameras look along X, with Z up and Y left -->
   <!-- In ROS 2, cameras look along Z, with X right and Y down -->
   <joint name="front_stereo_joint" type="fixed">
     <parent link="dvl_link" />
