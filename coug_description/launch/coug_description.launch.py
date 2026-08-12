@@ -13,10 +13,11 @@
 # limitations under the License.
 
 import os
+from typing import Any
 
 import yaml
 from ament_index_python.packages import get_package_share_directory
-from launch import LaunchDescription
+from launch import LaunchContext, LaunchDescription
 from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.conditions import IfCondition
 from launch.substitutions import (
@@ -33,7 +34,7 @@ from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
 
 
-def launch_setup(context, *args, **kwargs) -> list:
+def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node]:
     use_sim_time = LaunchConfiguration("use_sim_time")
     auv_ns = LaunchConfiguration("auv_ns")
     auv_ns_str = auv_ns.perform(context)
@@ -55,7 +56,7 @@ def launch_setup(context, *args, **kwargs) -> list:
 
     config_dir = os.environ.get("CONFIG_DIR", "")
 
-    def load_launch_params(path, top_key):
+    def load_launch_params(path: str, top_key: str) -> dict[str, Any]:
         try:
             with open(path) as f:
                 config = yaml.safe_load(f)
