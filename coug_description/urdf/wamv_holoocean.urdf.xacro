@@ -73,6 +73,7 @@
   <joint name="modem_joint" type="fixed">
     <parent link="base_link" />
     <child link="modem_link" />
+    <!-- FLU frame defined here; seatrac_x150_imu_depth/base_status_poller convert FRD data -->
     <origin xyz="0 0 0" rpy="0 ${pi/2} 0" />
   </joint>
   <link name="modem_link" />
