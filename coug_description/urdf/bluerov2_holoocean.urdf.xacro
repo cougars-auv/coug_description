@@ -102,10 +102,25 @@
   <joint name="dvl_joint" type="fixed">
     <parent link="com_link" />
     <child link="dvl_link" />
-    <!-- Sensor FLU frame; FRD data converted by dvl_a50_twist/dvl_a50_odom -->
+    <!-- Sensor FLU frame; FRD data converted by dvl_a50_twist_beams/dvl_a50_odom -->
     <origin xyz="0 -0.1 -0.1" rpy="0 0 0" />
   </joint>
   <link name="dvl_link" />
+
+  <xacro:macro name="dvl_beam" params="name yaw">
+    <joint name="${name}_joint" type="fixed">
+      <parent link="dvl_link" />
+      <child link="${name}_link" />
+      <!-- +X axis down each DVL beam -->
+      <origin xyz="0 0 0" rpy="0 ${radians(67.5)} ${yaw}" />
+    </joint>
+    <link name="${name}_link" />
+  </xacro:macro>
+
+  <xacro:dvl_beam name="beam0" yaw="${radians(0)}" />
+  <xacro:dvl_beam name="beam1" yaw="${radians(90)}" />
+  <xacro:dvl_beam name="beam2" yaw="${radians(180)}" />
+  <xacro:dvl_beam name="beam3" yaw="${radians(-90)}" />
 
   <!-- CameraSocket -->
   <joint name="camera_joint" type="fixed">
