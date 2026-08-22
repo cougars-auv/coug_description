@@ -1,13 +1,6 @@
 <?xml version="1.0"?>
 <robot name="couguv" xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <!--
-  @file couguv.urdf.xacro
-  @brief URDF description for the CougUV.
-  @author Nelson Durrant
-  @date May 2026
-  -->
-
   <xacro:property name="base_radius" value="0.06" />
   <xacro:property name="base_length" value="1.2" />
   <xacro:property name="enclosure_length" value="0.5" />

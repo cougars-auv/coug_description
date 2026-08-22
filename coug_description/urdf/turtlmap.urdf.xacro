@@ -1,13 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="bluerov2">
 
-  <!--
-  @file bluerov2.urdf.xacro
-  @brief URDF description for the TURTLMap BlueROV2.
-  @author Nelson Durrant
-  @date May 2026
-  -->
-
   <xacro:property name="mass" value="9.5" />
   <xacro:property name="ixx" value="0.16" />
   <xacro:property name="iyy" value="0.17" />
