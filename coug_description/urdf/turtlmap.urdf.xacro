@@ -49,30 +49,30 @@
     vis_rpy="-1.571 0 1.571" />
 
   <!-- IMU Link -->
-  <link name="imu_link" />
   <joint name="imu_joint" type="fixed">
     <parent link="base_link" />
     <child link="imu_link" />
     <!-- Sensor FRD frame -->
     <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}" />
   </joint>
+  <link name="imu_link" />
 
   <!-- Depth Link -->
-  <link name="depth_link" />
   <joint name="depth_joint" type="fixed">
     <parent link="base_link" />
     <child link="depth_link" />
     <origin xyz="0 0 0" rpy="0 0 0" />
   </joint>
+  <link name="depth_link" />
 
   <!-- DVL Link -->
-  <link name="dvl_link" />
   <joint name="dvl_joint" type="fixed">
     <parent link="base_link" />
     <child link="dvl_link" />
     <!-- Sensor FLU frame; FRD data converted by dvl_a50_twist_beams/dvl_a50_odom -->
     <origin xyz="0.113 0.001 -0.04" rpy="0 0 0" />
   </joint>
+  <link name="dvl_link" />
 
   <xacro:macro name="dvl_beam" params="name yaw">
     <joint name="${name}_joint" type="fixed">
@@ -88,5 +88,13 @@
   <xacro:dvl_beam name="beam1" yaw="${radians(135)}" />
   <xacro:dvl_beam name="beam2" yaw="${radians(45)}" />
   <xacro:dvl_beam name="beam3" yaw="${radians(-45)}" />
+
+  <!-- ZED Mini Camera Link -->
+  <joint name="zedm_left_camera_joint" type="fixed">
+    <parent link="imu_link" />
+    <child link="zedm_left_camera_frame" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+  <link name="zedm_left_camera_frame" />
 
 </robot>
