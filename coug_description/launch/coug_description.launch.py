@@ -36,8 +36,8 @@ from launch_ros.parameter_descriptions import ParameterValue
 
 def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node]:
     use_sim_time = LaunchConfiguration("use_sim_time")
-    auv_ns = LaunchConfiguration("auv_ns")
-    auv_ns_str = auv_ns.perform(context)
+    agent_ns = LaunchConfiguration("agent_ns")
+    agent_ns_str = agent_ns.perform(context)
 
     coug_description_dir = get_package_share_directory("coug_description")
     fleet_params = PathJoinSubstitution(
@@ -47,10 +47,10 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
             "coug_description_params.yaml",
         ]
     )
-    auv_params = PathJoinSubstitution(
+    agent_params = PathJoinSubstitution(
         [
             EnvironmentVariable("CONFIG_DIR"),
-            PythonExpression(["'", auv_ns, "' + '_params.yaml'"]),
+            PythonExpression(["'", agent_ns, "' + '_params.yaml'"]),
         ]
     )
 
@@ -68,7 +68,7 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
         os.path.join(config_dir, "fleet", "coug_description_params.yaml"), "/**"
     )
     agent_params = load_launch_params(
-        os.path.join(config_dir, f"{auv_ns_str}_params.yaml"), f"/{auv_ns_str}"
+        os.path.join(config_dir, f"{agent_ns_str}_params.yaml"), f"/{agent_ns_str}"
     )
     urdf_filename = agent_params.get(
         "urdf_file",
@@ -76,7 +76,9 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
     )
     urdf_file = os.path.join(coug_description_dir, "urdf", urdf_filename)
 
-    frame_prefix = PythonExpression(["'", auv_ns, "/' if '", auv_ns, "' != '' else ''"])
+    frame_prefix = PythonExpression(
+        ["'", agent_ns, "/' if '", agent_ns, "' != '' else ''"]
+    )
 
     return [
         Node(
@@ -85,7 +87,7 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
             name="robot_state_publisher",
             parameters=[
                 fleet_params,
-                auv_params,
+                agent_params,
                 {
                     "robot_description": ParameterValue(
                         Command(["xacro ", urdf_file]),
@@ -102,13 +104,13 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
             name="joint_state_publisher",
             parameters=[
                 fleet_params,
-                auv_params,
+                agent_params,
                 {"use_sim_time": use_sim_time},
             ],
             condition=IfCondition(
                 OrSubstitution(
                     NotEqualsSubstitution(use_sim_time, "true"),
-                    EqualsSubstitution(auv_ns, "coug2"),
+                    EqualsSubstitution(agent_ns, "coug2"),
                 )
             ),
         ),
@@ -124,9 +126,9 @@ def generate_launch_description() -> LaunchDescription:
                 description="Use simulation/rosbag clock if true",
             ),
             DeclareLaunchArgument(
-                "auv_ns",
+                "agent_ns",
                 default_value="auv0",
-                description="Namespace for the AUV (e.g. auv0)",
+                description="Namespace for the agent (e.g. auv0)",
             ),
             OpaqueFunction(function=launch_setup),
         ]
