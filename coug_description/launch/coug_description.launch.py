@@ -40,21 +40,14 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
     agent_ns_str = agent_ns.perform(context)
 
     coug_description_dir = get_package_share_directory("coug_description")
-    fleet_params = PathJoinSubstitution(
+    fleet_param_file = PathJoinSubstitution(
         [
             EnvironmentVariable("CONFIG_DIR"),
             "fleet",
             "coug_description_params.yaml",
         ]
     )
-    agent_params = PathJoinSubstitution(
-        [
-            EnvironmentVariable("CONFIG_DIR"),
-            PythonExpression(["'", agent_ns, "' + '_params.yaml'"]),
-        ]
-    )
-
-    config_dir = os.environ.get("CONFIG_DIR", "")
+    config_dir = os.environ["CONFIG_DIR"]
 
     def load_launch_params(path: str, top_key: str) -> dict[str, Any]:
         try:
@@ -67,10 +60,10 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
     fleet_defaults = load_launch_params(
         os.path.join(config_dir, "fleet", "coug_description_params.yaml"), "/**"
     )
-    agent_params = load_launch_params(
+    agent_launch_params = load_launch_params(
         os.path.join(config_dir, f"{agent_ns_str}_params.yaml"), f"/{agent_ns_str}"
     )
-    urdf_filename = agent_params.get(
+    urdf_filename = agent_launch_params.get(
         "urdf_file",
         fleet_defaults.get("urdf_file", "couguv_holoocean.urdf.xacro"),
     )
@@ -86,8 +79,8 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
             executable="robot_state_publisher",
             name="robot_state_publisher",
             parameters=[
-                fleet_params,
-                agent_params,
+                fleet_param_file,
+                agent_launch_params,
                 {
                     "robot_description": ParameterValue(
                         Command(["xacro ", urdf_file]),
@@ -103,8 +96,8 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
             executable="joint_state_publisher",
             name="joint_state_publisher",
             parameters=[
-                fleet_params,
-                agent_params,
+                fleet_param_file,
+                agent_launch_params,
                 {"use_sim_time": use_sim_time},
             ],
             condition=IfCondition(
