@@ -58,8 +58,8 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
 
     def load_launch_params(path: str, top_key: str) -> dict[str, Any]:
         try:
-            with open(path) as f:
-                config = yaml.safe_load(f)
+            with open(path) as config_file:
+                config = yaml.safe_load(config_file)
             return config[top_key]["coug_description_launch"]["ros__parameters"]
         except (KeyError, TypeError, OSError):
             return {}
