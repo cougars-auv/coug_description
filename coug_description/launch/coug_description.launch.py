@@ -53,7 +53,8 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
         try:
             with open(path) as config_file:
                 config = yaml.safe_load(config_file)
-            return config[top_key]["coug_description_launch"]["ros__parameters"]
+            params = config[top_key]["coug_description_launch"]["ros__parameters"]
+            return dict(params)
         except (KeyError, TypeError, OSError):
             return {}
 
