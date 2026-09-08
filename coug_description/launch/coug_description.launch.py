@@ -70,9 +70,7 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
     )
     urdf_file = os.path.join(coug_description_dir, "urdf", urdf_filename)
 
-    frame_prefix = PythonExpression(
-        ["'", agent_ns, "/' if '", agent_ns, "' != '' else ''"]
-    )
+    frame_prefix = PythonExpression(["'", agent_ns, "/' if '", agent_ns, "' != '' else ''"])
 
     return [
         Node(
