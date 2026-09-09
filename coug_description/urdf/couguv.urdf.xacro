@@ -164,7 +164,7 @@
     <parent link="base_link" />
     <child link="modem_link" />
     <!-- Sensor FLU frame; FRD data converted by seatrac_x150_imu_depth/base_status_poller -->
-    <origin xyz="0.35 0 -0.086" rpy="0 0 0" />
+    <origin xyz="0.35 0 -0.086" rpy="${radians(180)} 0 0" />
   </joint>
   <link name="modem_link" />
 
