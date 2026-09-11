@@ -174,15 +174,6 @@
   </joint>
   <link name="depth_link" />
 
-  <!-- AcousticModemSocket -->
-  <joint name="modem_joint" type="fixed">
-    <parent link="com_link" />
-    <child link="modem_link" />
-    <!-- Sensor FLU frame; FRD data converted by seatrac_x150_imu_depth/base_status_poller -->
-    <origin xyz="0.3785 0 -0.0985" rpy="0 0 0" />
-  </joint>
-  <link name="modem_link" />
-
   <!-- DVLSocket -->
   <joint name="dvl_joint" type="fixed">
     <parent link="com_link" />
@@ -206,6 +197,15 @@
   <xacro:dvl_beam name="beam1" yaw="${radians(90)}" />
   <xacro:dvl_beam name="beam2" yaw="${radians(180)}" />
   <xacro:dvl_beam name="beam3" yaw="${radians(-90)}" />
+
+  <!-- AcousticModemSocket -->
+  <joint name="modem_joint" type="fixed">
+    <parent link="com_link" />
+    <child link="modem_link" />
+    <!-- Sensor FLU frame; FRD data converted by seatrac_x150_imu_depth/base_status_poller -->
+    <origin xyz="0.3785 0 -0.0985" rpy="0 0 0" />
+  </joint>
+  <link name="modem_link" />
 
   <!-- CameraSocket -->
   <joint name="camera_joint" type="fixed">

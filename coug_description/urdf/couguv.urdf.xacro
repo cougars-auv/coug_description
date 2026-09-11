@@ -159,15 +159,6 @@
   </joint>
   <link name="depth_link" />
 
-  <!-- Modem Link -->
-  <joint name="modem_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="modem_link" />
-    <!-- Sensor FLU frame; FRD data converted by seatrac_x150_imu_depth/base_status_poller -->
-    <origin xyz="0.35 0 -0.086" rpy="${radians(180)} 0 0" />
-  </joint>
-  <link name="modem_link" />
-
   <!-- DVL Link -->
   <joint name="dvl_joint" type="fixed">
     <parent link="base_link" />
@@ -191,5 +182,14 @@
   <xacro:dvl_beam name="beam1" yaw="${radians(135)}" />
   <xacro:dvl_beam name="beam2" yaw="${radians(45)}" />
   <xacro:dvl_beam name="beam3" yaw="${radians(-45)}" />
+
+  <!-- Modem Link -->
+  <joint name="modem_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="modem_link" />
+    <!-- Sensor FLU frame; FRD data converted by seatrac_x150_imu_depth/base_status_poller -->
+    <origin xyz="0.35 0 -0.086" rpy="${radians(180)} 0 0" />
+  </joint>
+  <link name="modem_link" />
 
 </robot>

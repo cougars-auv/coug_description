@@ -56,14 +56,6 @@
   </joint>
   <link name="imu_link" />
 
-  <!-- Depth Link -->
-  <joint name="depth_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="depth_link" />
-    <origin xyz="0 0 0" rpy="0 0 0" />
-  </joint>
-  <link name="depth_link" />
-
   <!-- GPS Link -->
   <joint name="gps_joint" type="fixed">
     <parent link="base_link" />
@@ -71,6 +63,14 @@
     <origin xyz="-0.11770 -0.20723 0.40019" rpy="0 0 0" />
   </joint>
   <link name="gps_link" />
+
+  <!-- Depth Link -->
+  <joint name="depth_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="depth_link" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+  <link name="depth_link" />
 
   <!-- DVL Link -->
   <joint name="dvl_joint" type="fixed">
@@ -95,6 +95,16 @@
   <xacro:dvl_beam name="beam1" yaw="${radians(135)}" />
   <xacro:dvl_beam name="beam2" yaw="${radians(45)}" />
   <xacro:dvl_beam name="beam3" yaw="${radians(-45)}" />
+
+  <!-- TODO: Update this -->
+  <!-- Modem Link -->
+  <joint name="modem_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="modem_link" />
+    <!-- Sensor FLU frame; FRD data converted by seatrac_x150_imu_depth/base_status_poller -->
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+  <link name="modem_link" />
 
   <!-- Sonar Link -->
   <joint name="sonar_joint" type="fixed">
