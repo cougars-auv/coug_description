@@ -110,6 +110,7 @@
   <joint name="sonar_joint" type="fixed">
     <parent link="base_link" />
     <child link="sonar_link" />
+    <!-- Sensor FRD frame -->
     <origin xyz="0.2 0 0" rpy="0 0 0" />
   </joint>
   <link name="sonar_link" />
