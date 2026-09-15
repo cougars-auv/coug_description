@@ -6,7 +6,6 @@
   <xacro:property name="iyy" value="0.17" />
   <xacro:property name="izz" value="0.12" />
 
-  <!-- Main WAM-V body -->
   <link name="base_link">
     <visual>
       <geometry>
@@ -52,7 +51,7 @@
   <joint name="depth_joint" type="fixed">
     <parent link="base_link" />
     <child link="depth_link" />
-    <origin xyz="0 0 0" rpy="0 ${pi/2} 0" />
+    <origin xyz="0 0 0" rpy="0 ${radians(90)} 0" />
   </joint>
   <link name="depth_link" />
 
@@ -64,26 +63,26 @@
   </joint>
   <link name="dvl_link" />
 
-  <xacro:macro name="dvl_beam" params="name yaw">
-    <joint name="${name}_joint" type="fixed">
+  <xacro:macro name="dvl_beam" params="prefix yaw">
+    <joint name="${prefix}_joint" type="fixed">
       <parent link="dvl_link" />
-      <child link="${name}_link" />
+      <child link="${prefix}_link" />
       <!-- +X axis down each DVL beam -->
       <origin xyz="0 0 0" rpy="0 ${radians(67.5)} ${yaw}" />
     </joint>
-    <link name="${name}_link" />
+    <link name="${prefix}_link" />
   </xacro:macro>
 
-  <xacro:dvl_beam name="beam0" yaw="${radians(0)}" />
-  <xacro:dvl_beam name="beam1" yaw="${radians(90)}" />
-  <xacro:dvl_beam name="beam2" yaw="${radians(180)}" />
-  <xacro:dvl_beam name="beam3" yaw="${radians(-90)}" />
+  <xacro:dvl_beam prefix="beam0" yaw="${radians(0)}" />
+  <xacro:dvl_beam prefix="beam1" yaw="${radians(90)}" />
+  <xacro:dvl_beam prefix="beam2" yaw="${radians(180)}" />
+  <xacro:dvl_beam prefix="beam3" yaw="${radians(-90)}" />
 
   <joint name="modem_joint" type="fixed">
     <parent link="base_link" />
     <child link="modem_link" />
     <!-- Sensor FLU frame; FRD data converted by seatrac_x150_imu_depth/base_status_poller -->
-    <origin xyz="0 0 0" rpy="0 ${pi/2} 0" />
+    <origin xyz="0 0 0" rpy="0 ${radians(90)} 0" />
   </joint>
   <link name="modem_link" />
 

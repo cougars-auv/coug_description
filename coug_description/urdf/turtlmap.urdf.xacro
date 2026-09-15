@@ -9,21 +9,20 @@
   <link name="base_link">
     <visual>
       <geometry>
-        <mesh filename="package://coug_description/urdf/meshes/bluerov2/bluerov2.dae"
-          scale="0.025 0.025 0.025" />
+        <mesh filename="package://coug_description/urdf/meshes/bluerov2/bluerov2.dae" scale="0.025 0.025 0.025" />
       </geometry>
     </visual>
   </link>
 
-  <xacro:macro name="thruster" params="name xyz rpy mesh vis_rpy">
-    <joint name="${name}_joint" type="fixed">
+  <xacro:macro name="thruster" params="prefix xyz rpy mesh mesh_rpy">
+    <joint name="${prefix}_joint" type="fixed">
       <parent link="base_link" />
-      <child link="${name}_link" />
+      <child link="${prefix}_link" />
       <origin xyz="${xyz}" rpy="${rpy}" />
     </joint>
-    <link name="${name}_link">
+    <link name="${prefix}_link">
       <visual>
-        <origin xyz="0 0 0" rpy="${vis_rpy}" />
+        <origin xyz="0 0 0" rpy="${mesh_rpy}" />
         <geometry>
           <mesh filename="package://coug_description/urdf/meshes/bluerov2/${mesh}" />
         </geometry>
@@ -31,33 +30,32 @@
     </link>
   </xacro:macro>
 
-  <xacro:thruster name="thruster1" xyz="0.14 -0.092 0.0" rpy="-1.571 1.571 -0.785"
-    mesh="t200_ccw_prop.dae" vis_rpy="-1.571 0 0" />
-  <xacro:thruster name="thruster2" xyz="0.14 0.092 0.0" rpy="-1.571 1.571 -2.356"
-    mesh="t200_ccw_prop.dae" vis_rpy="-1.571 0 0" />
-  <xacro:thruster name="thruster3" xyz="-0.14 -0.092 0.0" rpy="-1.571 1.571 0.785"
-    mesh="t200_cw_prop.dae" vis_rpy="1.571 0 0" />
-  <xacro:thruster name="thruster4" xyz="-0.14 0.092 0.0" rpy="-1.571 1.571 2.356"
-    mesh="t200_cw_prop.dae" vis_rpy="1.571 0 0" />
-  <xacro:thruster name="thruster5" xyz="0.118 -0.215 0.064" rpy="0 0 0" mesh="t200_ccw_prop.dae"
-    vis_rpy="-1.571 0 1.571" />
-  <xacro:thruster name="thruster6" xyz="0.118 0.215 0.064" rpy="0 0 0" mesh="t200_cw_prop.dae"
-    vis_rpy="1.571 0 1.571" />
-  <xacro:thruster name="thruster7" xyz="-0.118 -0.215 0.064" rpy="0 0 0" mesh="t200_cw_prop.dae"
-    vis_rpy="1.571 0 1.571" />
-  <xacro:thruster name="thruster8" xyz="-0.118 0.215 0.064" rpy="0 0 0" mesh="t200_ccw_prop.dae"
-    vis_rpy="-1.571 0 1.571" />
+  <xacro:thruster prefix="thruster1" xyz="0.14 -0.092 0.0" rpy="${radians(-90)} ${radians(90)} ${radians(-45)}"
+    mesh="t200_ccw_prop.dae" mesh_rpy="${radians(-90)} 0 0" />
+  <xacro:thruster prefix="thruster2" xyz="0.14 0.092 0.0" rpy="${radians(-90)} ${radians(90)} ${radians(-135)}"
+    mesh="t200_ccw_prop.dae" mesh_rpy="${radians(-90)} 0 0" />
+  <xacro:thruster prefix="thruster3" xyz="-0.14 -0.092 0.0" rpy="${radians(-90)} ${radians(90)} ${radians(45)}"
+    mesh="t200_cw_prop.dae" mesh_rpy="${radians(90)} 0 0" />
+  <xacro:thruster prefix="thruster4" xyz="-0.14 0.092 0.0" rpy="${radians(-90)} ${radians(90)} ${radians(135)}"
+    mesh="t200_cw_prop.dae" mesh_rpy="${radians(90)} 0 0" />
+  <xacro:thruster prefix="thruster5" xyz="0.118 -0.215 0.064" rpy="0 0 0"
+    mesh="t200_ccw_prop.dae" mesh_rpy="${radians(-90)} 0 ${radians(90)}" />
+  <xacro:thruster prefix="thruster6" xyz="0.118 0.215 0.064" rpy="0 0 0"
+    mesh="t200_cw_prop.dae" mesh_rpy="${radians(90)} 0 ${radians(90)}" />
+  <xacro:thruster prefix="thruster7" xyz="-0.118 -0.215 0.064" rpy="0 0 0"
+    mesh="t200_cw_prop.dae" mesh_rpy="${radians(90)} 0 ${radians(90)}" />
+  <xacro:thruster prefix="thruster8" xyz="-0.118 0.215 0.064" rpy="0 0 0"
+    mesh="t200_ccw_prop.dae" mesh_rpy="${radians(-90)} 0 ${radians(90)}" />
 
-  <!-- IMU Link -->
+  <!-- Sensors -->
   <joint name="imu_joint" type="fixed">
     <parent link="base_link" />
     <child link="imu_link" />
     <!-- Sensor FRD frame -->
-    <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}" />
+    <origin xyz="0 0 0" rpy="${radians(90)} 0 ${radians(90)}" />
   </joint>
   <link name="imu_link" />
 
-  <!-- Depth Link -->
   <joint name="depth_joint" type="fixed">
     <parent link="base_link" />
     <child link="depth_link" />
@@ -65,7 +63,6 @@
   </joint>
   <link name="depth_link" />
 
-  <!-- DVL Link -->
   <joint name="dvl_joint" type="fixed">
     <parent link="base_link" />
     <child link="dvl_link" />
@@ -74,26 +71,25 @@
   </joint>
   <link name="dvl_link" />
 
-  <xacro:macro name="dvl_beam" params="name yaw">
-    <joint name="${name}_joint" type="fixed">
+  <xacro:macro name="dvl_beam" params="prefix yaw">
+    <joint name="${prefix}_joint" type="fixed">
       <parent link="dvl_link" />
-      <child link="${name}_link" />
+      <child link="${prefix}_link" />
       <!-- +X axis down each DVL beam -->
       <origin xyz="0 0 0" rpy="0 ${radians(67.5)} ${yaw}" />
     </joint>
-    <link name="${name}_link" />
+    <link name="${prefix}_link" />
   </xacro:macro>
 
-  <xacro:dvl_beam name="beam0" yaw="${radians(-135)}" />
-  <xacro:dvl_beam name="beam1" yaw="${radians(135)}" />
-  <xacro:dvl_beam name="beam2" yaw="${radians(45)}" />
-  <xacro:dvl_beam name="beam3" yaw="${radians(-45)}" />
+  <xacro:dvl_beam prefix="beam0" yaw="${radians(-135)}" />
+  <xacro:dvl_beam prefix="beam1" yaw="${radians(135)}" />
+  <xacro:dvl_beam prefix="beam2" yaw="${radians(45)}" />
+  <xacro:dvl_beam prefix="beam3" yaw="${radians(-45)}" />
 
-  <!-- ZED Mini Camera Link -->
   <joint name="zedm_left_camera_joint" type="fixed">
     <parent link="base_link" />
     <child link="zedm_left_camera_frame" />
-    <origin xyz="0 0 0" rpy="${-pi/2} ${pi/2} 0" />
+    <origin xyz="0 0 0" rpy="${radians(-90)} ${radians(90)} 0" />
   </joint>
   <link name="zedm_left_camera_frame" />
 
