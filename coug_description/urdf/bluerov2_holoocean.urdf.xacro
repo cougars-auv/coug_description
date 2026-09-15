@@ -131,27 +131,48 @@
   </joint>
   <link name="sonar_link" />
 
-  <!-- Configured stereo camera poses (optical frame) -->
+  <!-- Configured stereo camera poses -->
   <joint name="front_stereo_joint" type="fixed">
     <parent link="dvl_link" />
     <child link="front_stereo_link" />
-    <origin xyz="0.1 0 0" rpy="${pi} 0 ${-pi/2}" />
+    <origin xyz="0.1 0 0" rpy="0 ${pi/2} 0" />
   </joint>
   <link name="front_stereo_link" />
+
+  <joint name="front_stereo_optical_joint" type="fixed">
+    <parent link="front_stereo_link" />
+    <child link="front_stereo_optical_link" />
+    <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
+  </joint>
+  <link name="front_stereo_optical_link" />
 
   <joint name="back_stereo_joint" type="fixed">
     <parent link="dvl_link" />
     <child link="back_stereo_link" />
-    <origin xyz="-0.1 0 0" rpy="${pi} 0 ${-pi/2}" />
+    <origin xyz="-0.1 0 0" rpy="0 ${pi/2} 0" />
   </joint>
   <link name="back_stereo_link" />
 
-  <!-- Configured depth camera pose (optical frame) -->
+  <joint name="back_stereo_optical_joint" type="fixed">
+    <parent link="back_stereo_link" />
+    <child link="back_stereo_optical_link" />
+    <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
+  </joint>
+  <link name="back_stereo_optical_link" />
+
+  <!-- Configured depth camera pose -->
   <joint name="depth_camera_joint" type="fixed">
     <parent link="dvl_link" />
     <child link="depth_camera_link" />
-    <origin xyz="0 0 0" rpy="${pi} 0 ${-pi/2}" />
+    <origin xyz="0 0 0" rpy="0 ${pi/2} 0" />
   </joint>
   <link name="depth_camera_link" />
+
+  <joint name="depth_camera_optical_joint" type="fixed">
+    <parent link="depth_camera_link" />
+    <child link="depth_camera_optical_link" />
+    <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
+  </joint>
+  <link name="depth_camera_optical_link" />
 
 </robot>
