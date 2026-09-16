@@ -73,7 +73,7 @@
     </inertial>
   </xacro:macro>
 
-  <xacro:macro name="add_imu_noise" params="stddev">
+  <xacro:macro name="add_xyz_noise" params="stddev">
     <xacro:macro name="add_axis_noise">
       <noise type="gaussian">
         <mean>0.0</mean>
@@ -179,10 +179,10 @@
 
     <plugin filename="gz-sim-odometry-publisher-system" name="gz::sim::systems::OdometryPublisher">
       <dimensions>3</dimensions>
-      <!-- https://github.com/stereolabs/zed-ros2-wrapper/blob/v5.4.1/zed_wrapper/config/zed2i.yaml#L11 -->
       <odom_publish_frequency>60</odom_publish_frequency>
       <odom_topic>/${agent_ns}/camera/odom</odom_topic>
       <odom_covariance_topic>/${agent_ns}/camera/odom_with_covariance</odom_covariance_topic>
+      <gaussian_noise>0.01</gaussian_noise>
       <odom_frame>${agent_ns}/odom</odom_frame>
       <robot_base_frame>${agent_ns}/base_link</robot_base_frame>
     </plugin>
@@ -193,22 +193,19 @@
     <sensor name="imu" type="imu">
       <always_on>true</always_on>
       <update_rate>100</update_rate>
-      <topic>/${agent_ns}/camera/imu/data</topic>
+      <topic>/${agent_ns}/camera/imu/data_raw</topic>
       <gz_frame_id>${agent_ns}/imu_link</gz_frame_id>
       <imu>
-        <enable_orientation>true</enable_orientation>
-        <orientation_reference_frame>
-          <localization>ENU</localization>
-        </orientation_reference_frame>
+        <enable_orientation>false</enable_orientation>
         <!-- 0.007 °/s/√Hz * √100 Hz -> 1.2e-3 rad/s
-          0.0016 m/s^2/√Hz * √100 Hz -> 1.6e-2 m/s^2
-          https://github.com/stereolabs/zed-sdk/issues/487
-          https://github.com/stereolabs/zed-ros2-wrapper/blob/v5.4.1/zed_wrapper/config/common_stereo.yaml#L64 -->
+        0.0016 m/s^2/√Hz * √100 Hz -> 1.6e-2 m/s^2
+        https://github.com/stereolabs/zed-sdk/issues/487
+        https://github.com/stereolabs/zed-ros2-wrapper/blob/v5.4.1/zed_wrapper/config/common_stereo.yaml -->
         <angular_velocity>
-          <xacro:add_imu_noise stddev="1.2e-3" />
+          <xacro:add_xyz_noise stddev="1.2e-3" />
         </angular_velocity>
         <linear_acceleration>
-          <xacro:add_imu_noise stddev="1.6e-2" />
+          <xacro:add_xyz_noise stddev="1.6e-2" />
         </linear_acceleration>
       </imu>
     </sensor>
@@ -218,6 +215,10 @@
       <update_rate>50</update_rate>
       <topic>/${agent_ns}/camera/imu/mag</topic>
       <gz_frame_id>${agent_ns}/imu_link</gz_frame_id>
+      <magnetometer>
+        <!-- https://support.sbg-systems.com/sc/el/latest/ellipse-documentation/hardware-documentation/aiding-sensors -->
+        <xacro:add_xyz_noise stddev="3.0e-7" />
+      </magnetometer>
     </sensor>
   </gazebo>
 
@@ -257,9 +258,9 @@
       <gz_frame_id>${agent_ns}/depth_camera_link</gz_frame_id>
       <camera>
         <!-- https://www.stereolabs.com/en-us/products/zed-2i
-          https://github.com/stereolabs/zed-ros2-wrapper/blob/v5.4.1/zed_wrapper/config/zed2i.yaml#L10-L20
-          https://github.com/stereolabs/zed-ros2-wrapper/blob/v5.4.1/zed_wrapper/config/common_stereo.yaml#L30-L33
-          https://support.stereolabs.com/articles/9175329825 -->
+        https://github.com/stereolabs/zed-ros2-wrapper/blob/v5.4.1/zed_wrapper/config/zed2i.yaml
+        https://github.com/stereolabs/zed-ros2-wrapper/blob/v5.4.1/zed_wrapper/config/common_stereo.yaml
+        https://support.stereolabs.com/articles/9175329825 -->
         <horizontal_fov>${radians(110)}</horizontal_fov>
         <!-- <horizontal_fov>${radians(68)}</horizontal_fov> -->
         <image>

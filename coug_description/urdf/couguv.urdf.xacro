@@ -174,7 +174,7 @@
   <joint name="dvl_joint" type="fixed">
     <parent link="base_link" />
     <child link="dvl_link" />
-    <!-- Sensor FLU frame; FRD data converted by dvl_a50_twist_beams/dvl_a50_odom -->
+    <!-- Sensor FLU frame; FRD data converted upstream -->
     <origin xyz="0.475 0 -0.035" rpy="0 0 0" />
   </joint>
   <link name="dvl_link" />
@@ -197,7 +197,7 @@
   <joint name="modem_joint" type="fixed">
     <parent link="base_link" />
     <child link="modem_link" />
-    <!-- Sensor FLU frame; FRD data converted by seatrac_x150_imu_depth/base_status_poller -->
+    <!-- Sensor FLU frame; FRD data converted upstream -->
     <origin xyz="0.35 0 -0.086" rpy="${radians(180)} 0 0" />
   </joint>
   <link name="modem_link" />
