@@ -28,10 +28,19 @@ from launch.substitutions import (
     NotEqualsSubstitution,
     OrSubstitution,
     PathJoinSubstitution,
-    PythonExpression,
 )
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
+
+
+def load_launch_params(path: str, top_key: str) -> dict[str, Any]:
+    try:
+        with open(path) as config_file:
+            config = yaml.safe_load(config_file)
+        params = config[top_key]["coug_description_launch"]["ros__parameters"]
+        return dict(params)
+    except (KeyError, TypeError, OSError):
+        return {}
 
 
 def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node]:
@@ -39,7 +48,9 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
     agent_ns = LaunchConfiguration("agent_ns")
     agent_ns_str = agent_ns.perform(context)
 
+    config_dir = os.environ["CONFIG_DIR"]
     coug_description_dir = get_package_share_directory("coug_description")
+
     fleet_param_file = PathJoinSubstitution(
         [
             EnvironmentVariable("CONFIG_DIR"),
@@ -47,30 +58,23 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
             "coug_description_params.yaml",
         ]
     )
-    config_dir = os.environ["CONFIG_DIR"]
+    agent_param_file = PathJoinSubstitution(
+        [
+            EnvironmentVariable("CONFIG_DIR"),
+            [agent_ns, "_params.yaml"],
+        ]
+    )
 
-    def load_launch_params(path: str, top_key: str) -> dict[str, Any]:
-        try:
-            with open(path) as config_file:
-                config = yaml.safe_load(config_file)
-            params = config[top_key]["coug_description_launch"]["ros__parameters"]
-            return dict(params)
-        except (KeyError, TypeError, OSError):
-            return {}
-
-    fleet_defaults = load_launch_params(
+    fleet_launch_params = load_launch_params(
         os.path.join(config_dir, "fleet", "coug_description_params.yaml"), "/**"
     )
     agent_launch_params = load_launch_params(
         os.path.join(config_dir, f"{agent_ns_str}_params.yaml"), f"/{agent_ns_str}"
     )
-    urdf_filename = agent_launch_params.get(
-        "urdf_file",
-        fleet_defaults.get("urdf_file", "couguv_holoocean.urdf.xacro"),
-    )
+    urdf_filename = agent_launch_params.get("urdf_file", fleet_launch_params["urdf_file"])
     urdf_file = os.path.join(coug_description_dir, "urdf", urdf_filename)
 
-    frame_prefix = PythonExpression(["'", agent_ns, "/' if '", agent_ns, "' != '' else ''"])
+    frame_prefix = f"{agent_ns_str}/" if agent_ns_str else ""
 
     return [
         Node(
@@ -79,7 +83,7 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
             name="robot_state_publisher",
             parameters=[
                 fleet_param_file,
-                agent_launch_params,
+                agent_param_file,
                 {
                     "robot_description": ParameterValue(
                         Command(["xacro ", urdf_file]),
@@ -96,7 +100,7 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
             name="joint_state_publisher",
             parameters=[
                 fleet_param_file,
-                agent_launch_params,
+                agent_param_file,
                 {"use_sim_time": use_sim_time},
             ],
             condition=IfCondition(
