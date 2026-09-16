@@ -64,7 +64,9 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
             [agent_ns, "_params.yaml"],
         ]
     )
-    scenario_param_file = LaunchConfiguration("scenario_param_file")
+    scenario_param_file = (
+        LaunchConfiguration("scenario_param_file").perform(context) or agent_param_file
+    )
 
     fleet_launch_params = load_launch_params(
         os.path.join(config_dir, "fleet", "coug_description_params.yaml"), "/**"
@@ -129,12 +131,7 @@ def generate_launch_description() -> LaunchDescription:
             ),
             DeclareLaunchArgument(
                 "scenario_param_file",
-                default_value=PathJoinSubstitution(
-                    [
-                        EnvironmentVariable("CONFIG_DIR"),
-                        [LaunchConfiguration("agent_ns"), "_params.yaml"],
-                    ]
-                ),
+                default_value="",
             ),
             OpaqueFunction(function=launch_setup),
         ]
