@@ -64,6 +64,7 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
             [agent_ns, "_params.yaml"],
         ]
     )
+    scenario_param_file = LaunchConfiguration("scenario_param_file")
 
     fleet_launch_params = load_launch_params(
         os.path.join(config_dir, "fleet", "coug_description_params.yaml"), "/**"
@@ -84,6 +85,7 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
             parameters=[
                 fleet_param_file,
                 agent_param_file,
+                scenario_param_file,
                 {
                     "robot_description": ParameterValue(
                         Command(["xacro ", urdf_file]),
@@ -101,6 +103,7 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
             parameters=[
                 fleet_param_file,
                 agent_param_file,
+                scenario_param_file,
                 {"use_sim_time": use_sim_time},
             ],
             condition=IfCondition(
@@ -123,6 +126,15 @@ def generate_launch_description() -> LaunchDescription:
             DeclareLaunchArgument(
                 "agent_ns",
                 default_value="auv0",
+            ),
+            DeclareLaunchArgument(
+                "scenario_param_file",
+                default_value=PathJoinSubstitution(
+                    [
+                        EnvironmentVariable("CONFIG_DIR"),
+                        [LaunchConfiguration("agent_ns"), "_params.yaml"],
+                    ]
+                ),
             ),
             OpaqueFunction(function=launch_setup),
         ]
