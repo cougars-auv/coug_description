@@ -59,8 +59,10 @@
       <odom_topic>/${agent_ns}/camera/odom</odom_topic>
       <odom_covariance_topic>/${agent_ns}/camera/odom_with_covariance</odom_covariance_topic>
       <gaussian_noise>0.01</gaussian_noise>
+      <xyz_offset>${base_length/2 + mast_length/2 + depth_camera_xoff} 0 ${mast_height/2 - base_height/2 + depth_camera_zoff}</xyz_offset>
+      <rpy_offset>0 ${depth_camera_pitch} 0</rpy_offset>
       <odom_frame>${agent_ns}/odom</odom_frame>
-      <robot_base_frame>${agent_ns}/base_link</robot_base_frame>
+      <robot_base_frame>${agent_ns}/depth_camera_link</robot_base_frame>
     </plugin>
   </gazebo>
 
