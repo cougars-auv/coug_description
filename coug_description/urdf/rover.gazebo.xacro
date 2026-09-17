@@ -48,6 +48,14 @@
     <plugin filename="gz-sim-odometry-publisher-system" name="gz::sim::systems::OdometryPublisher">
       <dimensions>3</dimensions>
       <odom_publish_frequency>60</odom_publish_frequency>
+      <odom_topic>/${agent_ns}/odometry/truth</odom_topic>
+      <odom_frame>map</odom_frame>
+      <robot_base_frame>${agent_ns}/base_link</robot_base_frame>
+    </plugin>
+
+    <plugin filename="gz-sim-odometry-publisher-system" name="gz::sim::systems::OdometryPublisher">
+      <dimensions>3</dimensions>
+      <odom_publish_frequency>60</odom_publish_frequency>
       <odom_topic>/${agent_ns}/camera/odom</odom_topic>
       <odom_covariance_topic>/${agent_ns}/camera/odom_with_covariance</odom_covariance_topic>
       <gaussian_noise>0.01</gaussian_noise>
