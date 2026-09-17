@@ -52,17 +52,10 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
     coug_description_dir = get_package_share_directory("coug_description")
 
     fleet_param_file = PathJoinSubstitution(
-        [
-            EnvironmentVariable("CONFIG_DIR"),
-            "fleet",
-            "coug_description_params.yaml",
-        ]
+        [EnvironmentVariable("CONFIG_DIR"), "fleet", "coug_description_params.yaml"]
     )
     agent_param_file = PathJoinSubstitution(
-        [
-            EnvironmentVariable("CONFIG_DIR"),
-            [agent_ns, "_params.yaml"],
-        ]
+        [EnvironmentVariable("CONFIG_DIR"), [agent_ns, "_params.yaml"]]
     )
     scenario_param_file = (
         LaunchConfiguration("scenario_param_file").perform(context) or agent_param_file
