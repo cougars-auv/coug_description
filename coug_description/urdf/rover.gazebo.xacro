@@ -25,6 +25,22 @@
     </z>
   </xacro:macro>
 
+  <!-- TODO: Add wheel friction that matches the real rover better -->
+  <xacro:macro name="wheel_friction" params="prefix">
+    <gazebo reference="${prefix}_wheel_link">
+      <mu1>1.0</mu1>
+      <mu2>0.5</mu2>
+      <fdir1>1 0 0</fdir1>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:wheel_friction prefix="front_left" />
+  <xacro:wheel_friction prefix="front_right" />
+  <xacro:wheel_friction prefix="middle_left" />
+  <xacro:wheel_friction prefix="middle_right" />
+  <xacro:wheel_friction prefix="rear_left" />
+  <xacro:wheel_friction prefix="rear_right" />
+
   <!-- Gazebo plugins -->
   <gazebo>
     <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
