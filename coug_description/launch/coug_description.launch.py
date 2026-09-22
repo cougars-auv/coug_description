@@ -18,8 +18,10 @@ from typing import Any
 import yaml
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchContext, LaunchDescription
+from launch.action import Action
 from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.conditions import IfCondition
+from launch.substitution import Substitution
 from launch.substitutions import (
     Command,
     EnvironmentVariable,
@@ -28,9 +30,14 @@ from launch.substitutions import (
     NotEqualsSubstitution,
     OrSubstitution,
     PathJoinSubstitution,
+    PythonExpression,
 )
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
+
+
+def agent_frame(agent_ns: str | Substitution, frame: str) -> PythonExpression:
+    return PythonExpression(["'", agent_ns, f"/{frame}' if '", agent_ns, f"' != '' else '{frame}'"])
 
 
 def load_launch_params(path: str, top_key: str) -> dict[str, Any]:
@@ -43,9 +50,10 @@ def load_launch_params(path: str, top_key: str) -> dict[str, Any]:
         return {}
 
 
-def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node]:
+def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Action]:
     use_sim_time = LaunchConfiguration("use_sim_time")
     agent_ns = LaunchConfiguration("agent_ns")
+
     agent_ns_str = agent_ns.perform(context)
 
     config_dir = os.environ["CONFIG_DIR"]
@@ -70,7 +78,7 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
     urdf_filename = agent_launch_params.get("urdf_file", fleet_launch_params.get("urdf_file"))
     urdf_file = os.path.join(coug_description_dir, "urdf", urdf_filename)
 
-    frame_prefix = f"{agent_ns_str}/" if agent_ns_str else ""
+    frame_prefix = agent_frame(agent_ns, "")
 
     return [
         Node(
@@ -95,18 +103,18 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Node
             package="joint_state_publisher",
             executable="joint_state_publisher",
             name="joint_state_publisher",
-            parameters=[
-                fleet_param_file,
-                agent_param_file,
-                scenario_param_file,
-                {"use_sim_time": use_sim_time},
-            ],
             condition=IfCondition(
                 OrSubstitution(
                     NotEqualsSubstitution(use_sim_time, "true"),
                     EqualsSubstitution(agent_ns, "coug2"),
                 )
             ),
+            parameters=[
+                fleet_param_file,
+                agent_param_file,
+                scenario_param_file,
+                {"use_sim_time": use_sim_time},
+            ],
         ),
     ]
 
