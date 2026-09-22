@@ -113,23 +113,6 @@
   <xacro:dvl_beam prefix="beam2" yaw="${radians(180)}" />
   <xacro:dvl_beam prefix="beam3" yaw="${radians(-90)}" />
 
-  <!-- CameraSocket -->
-  <joint name="camera_joint" type="fixed">
-    <parent link="com_link" />
-    <child link="camera_link" />
-    <origin xyz="0.21 0 0.06" rpy="0 0 0" />
-  </joint>
-  <link name="camera_link" />
-
-  <!-- SonarSocket -->
-  <joint name="sonar_joint" type="fixed">
-    <parent link="com_link" />
-    <child link="sonar_link" />
-    <origin xyz="0.15 0 0.14" rpy="0 0 0" />
-  </joint>
-  <link name="sonar_link" />
-
-  <!-- Configured stereo camera poses -->
   <joint name="front_stereo_joint" type="fixed">
     <parent link="dvl_link" />
     <child link="front_stereo_link" />
@@ -158,7 +141,6 @@
   </joint>
   <link name="back_stereo_optical_link" />
 
-  <!-- Configured depth camera pose -->
   <joint name="depth_camera_joint" type="fixed">
     <parent link="dvl_link" />
     <child link="depth_camera_link" />
@@ -172,5 +154,21 @@
     <origin xyz="0 0 0" rpy="${radians(-90)} 0 ${radians(-90)}" />
   </joint>
   <link name="depth_camera_optical_link" />
+
+  <!-- CameraSocket -->
+  <joint name="camera_joint" type="fixed">
+    <parent link="com_link" />
+    <child link="camera_link" />
+    <origin xyz="0.21 0 0.06" rpy="0 0 0" />
+  </joint>
+  <link name="camera_link" />
+
+  <!-- SonarSocket -->
+  <joint name="sonar_joint" type="fixed">
+    <parent link="com_link" />
+    <child link="sonar_link" />
+    <origin xyz="0.15 0 0.14" rpy="0 0 0" />
+  </joint>
+  <link name="sonar_link" />
 
 </robot>
