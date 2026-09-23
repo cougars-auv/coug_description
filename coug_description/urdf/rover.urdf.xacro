@@ -104,6 +104,8 @@
     </link>
   </xacro:macro>
 
+  <!-- TODO: Compare this with the new 2026 URDF -->
+
   <!-- Chassis -->
   <link name="base_link">
     <xacro:add_box color="LightGray" mass="${base_mass}" xyz="0 0 0" rpy="0 0 0" x="${base_length}" y="${base_width}" z="${base_height}" />
