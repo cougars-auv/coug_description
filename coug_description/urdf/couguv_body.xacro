@@ -17,6 +17,8 @@
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+  <xacro:include filename="$(find coug_description)/urdf/common.xacro" />
+
   <xacro:property name="base_radius" value="0.06" />
   <xacro:property name="base_length" value="1.2" />
   <xacro:property name="enclosure_length" value="0.5" />
@@ -50,72 +52,44 @@
   <!-- Body -->
   <link name="${tf_prefix}base_link" />
 
-  <joint name="clear_body_joint" type="fixed">
-    <parent link="${tf_prefix}base_link" />
-    <child link="${tf_prefix}clear_body_link" />
-    <origin xyz="0 0 0" rpy="0 0 0" />
-  </joint>
+  <xacro:fixed_joint name="clear_body" />
   <link name="${tf_prefix}clear_body_link">
     <xacro:cylinder_shape color="Acrylic" radius="${base_radius}" length="${enclosure_length}"
       rpy="0 ${radians(90)} 0" />
   </link>
 
-  <joint name="front_body_joint" type="fixed">
-    <parent link="${tf_prefix}base_link" />
-    <child link="${tf_prefix}front_body_link" />
-    <origin xyz="${(base_length - 2*base_radius - enclosure_length)/4 + enclosure_length/2} 0 0" rpy="0 0 0" />
-  </joint>
+  <xacro:fixed_joint name="front_body" xyz="${(base_length - 2*base_radius - enclosure_length)/4 + enclosure_length/2} 0 0" />
   <link name="${tf_prefix}front_body_link">
     <xacro:cylinder_shape color="Blue" radius="${base_radius}" length="${(base_length - 2*base_radius - enclosure_length)/2}"
       rpy="0 ${radians(90)} 0" />
   </link>
 
-  <joint name="back_body_joint" type="fixed">
-    <parent link="${tf_prefix}base_link" />
-    <child link="${tf_prefix}back_body_link" />
-    <origin xyz="${-((base_length - 2*base_radius - enclosure_length)/4 + enclosure_length/2)} 0 0" rpy="0 0 0" />
-  </joint>
+  <xacro:fixed_joint name="back_body" xyz="${-((base_length - 2*base_radius - enclosure_length)/4 + enclosure_length/2)} 0 0" />
   <link name="${tf_prefix}back_body_link">
     <xacro:cylinder_shape color="Blue" radius="${base_radius}" length="${(base_length - 2*base_radius - enclosure_length)/2}"
       rpy="0 ${radians(90)} 0" />
   </link>
 
   <!-- Handle -->
-  <joint name="handle_joint" type="fixed">
-    <parent link="${tf_prefix}base_link" />
-    <child link="${tf_prefix}handle_link" />
-    <origin xyz="0 0 ${base_radius + handle_height/2}" rpy="0 0 0" />
-  </joint>
+  <xacro:fixed_joint name="handle" xyz="0 0 ${base_radius + handle_height/2}" />
   <link name="${tf_prefix}handle_link">
     <xacro:box_shape color="White" x="${handle_length}" y="${handle_width}" z="${handle_height}" />
   </link>
 
   <!-- Tray -->
-  <joint name="tray_joint" type="fixed">
-    <parent link="${tf_prefix}base_link" />
-    <child link="${tf_prefix}tray_link" />
-    <origin xyz="0 0 ${-(base_radius + tray_height/2)}" rpy="0 0 0" />
-  </joint>
+  <xacro:fixed_joint name="tray" xyz="0 0 ${-(base_radius + tray_height/2)}" />
   <link name="${tf_prefix}tray_link">
     <xacro:box_shape color="White" x="${tray_length}" y="${tray_width}" z="${tray_height}" />
   </link>
 
   <!-- Hull -->
-  <joint name="hull_joint" type="fixed">
-    <parent link="${tf_prefix}base_link" />
-    <child link="${tf_prefix}hull_link" />
-    <origin xyz="${(base_length-2*base_radius)/2} 0 0" rpy="0 0 0" />
-  </joint>
+  <xacro:fixed_joint name="hull" xyz="${(base_length-2*base_radius)/2} 0 0" />
   <link name="${tf_prefix}hull_link">
     <xacro:sphere_shape color="Blue" radius="${base_radius}" />
   </link>
 
   <!-- Thruster -->
-  <joint name="thruster_joint" type="fixed">
-    <parent link="${tf_prefix}base_link" />
-    <child link="${tf_prefix}thruster_link" />
-    <origin xyz="${-(base_length-2*base_radius)/2} 0 0" rpy="0 0 0" />
-  </joint>
+  <xacro:fixed_joint name="thruster" xyz="${-(base_length-2*base_radius)/2} 0 0" />
   <link name="${tf_prefix}thruster_link">
     <xacro:cylinder_shape color="Gray" radius="${base_radius*0.9}" length="${2*base_radius}"
       rpy="0 ${radians(90)} 0" />

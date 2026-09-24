@@ -17,6 +17,8 @@
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+  <xacro:include filename="$(find coug_description)/urdf/common.xacro" />
+
   <link name="${tf_prefix}base_link">
     <visual>
       <geometry>
@@ -26,11 +28,7 @@
   </link>
 
   <xacro:macro name="thruster" params="prefix xyz rpy mesh mesh_rpy">
-    <joint name="${prefix}_joint" type="fixed">
-      <parent link="${tf_prefix}base_link" />
-      <child link="${tf_prefix}${prefix}_link" />
-      <origin xyz="${xyz}" rpy="${rpy}" />
-    </joint>
+    <xacro:fixed_joint name="${prefix}" xyz="${xyz}" rpy="${rpy}" />
     <link name="${tf_prefix}${prefix}_link">
       <visual>
         <origin xyz="0 0 0" rpy="${mesh_rpy}" />

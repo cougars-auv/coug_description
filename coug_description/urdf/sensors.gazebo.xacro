@@ -17,21 +17,21 @@
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="add_xyz_noise" params="stddev">
-    <xacro:macro name="add_axis_noise">
+  <xacro:macro name="xyz_noise" params="stddev">
+    <xacro:macro name="axis_noise">
       <noise type="gaussian">
         <mean>0.0</mean>
         <stddev>${stddev}</stddev>
       </noise>
     </xacro:macro>
     <x>
-      <xacro:add_axis_noise />
+      <xacro:axis_noise />
     </x>
     <y>
-      <xacro:add_axis_noise />
+      <xacro:axis_noise />
     </y>
     <z>
-      <xacro:add_axis_noise />
+      <xacro:axis_noise />
     </z>
   </xacro:macro>
 
@@ -75,10 +75,10 @@
             https://github.com/stereolabs/zed-sdk/issues/487
             https://github.com/stereolabs/zed-ros2-wrapper/blob/v5.4.1/zed_wrapper/config/common_stereo.yaml -->
           <angular_velocity>
-            <xacro:add_xyz_noise stddev="1.2e-3" />
+            <xacro:xyz_noise stddev="1.2e-3" />
           </angular_velocity>
           <linear_acceleration>
-            <xacro:add_xyz_noise stddev="1.6e-2" />
+            <xacro:xyz_noise stddev="1.6e-2" />
           </linear_acceleration>
         </imu>
       </sensor>
@@ -90,7 +90,7 @@
         <gz_frame_id>${link}</gz_frame_id>
         <magnetometer>
           <!-- https://support.sbg-systems.com/sc/el/latest/ellipse-documentation/hardware-documentation/aiding-sensors -->
-          <xacro:add_xyz_noise stddev="3.0e-7" />
+          <xacro:xyz_noise stddev="3.0e-7" />
         </magnetometer>
       </sensor>
     </gazebo>

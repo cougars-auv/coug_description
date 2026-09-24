@@ -86,11 +86,7 @@
   <xacro:wheel prefix="rear_right" xoff="${-wheel_xoff}" y_reflect="-1" />
 
   <!-- Mast -->
-  <joint name="mast_joint" type="fixed">
-    <parent link="${tf_prefix}base_link" />
-    <child link="${tf_prefix}mast_link" />
-    <origin xyz="${base_length/2 + mast_length/2} 0 ${mast_height/2 - base_height/2}" rpy="0 0 0" />
-  </joint>
+  <xacro:fixed_joint name="mast" xyz="${base_length/2 + mast_length/2} 0 ${mast_height/2 - base_height/2}" />
   <link name="${tf_prefix}mast_link">
     <xacro:box_shape color="LightGray" x="${mast_length}" y="${mast_width}" z="${mast_height}"
       mass="${mast_mass}" />
