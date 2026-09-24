@@ -17,6 +17,8 @@
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="wamv">
 
+  <xacro:include filename="$(find coug_description)/urdf/wamv_platform.xacro" />
+
   <xacro:property name="mass" value="9.5" />
   <xacro:property name="ixx" value="0.16" />
   <xacro:property name="iyy" value="0.17" />
@@ -25,7 +27,7 @@
   <link name="base_link">
     <visual>
       <geometry>
-        <mesh filename="package://coug_description/urdf/meshes/wamv/WAM-V-Base.dae" />
+        <mesh filename="package://wamv_description/models/WAM-V-Base/mesh/WAM-V-Base.dae" />
       </geometry>
     </visual>
   </link>
@@ -39,7 +41,7 @@
     <link name="${prefix}_engine_link">
       <visual>
         <geometry>
-          <mesh filename="package://coug_description/urdf/meshes/wamv/engine.dae" />
+          <mesh filename="package://wamv_description/models/engine/mesh/engine.dae" />
         </geometry>
       </visual>
     </link>
@@ -52,7 +54,7 @@
     <link name="${prefix}_propeller_link">
       <visual>
         <geometry>
-          <mesh filename="package://coug_description/urdf/meshes/wamv/propeller.dae" />
+          <mesh filename="package://wamv_description/models/propeller/mesh/propeller.dae" />
         </geometry>
       </visual>
     </link>
@@ -103,32 +105,6 @@
   <link name="modem_link" />
 
   <!-- Platform -->
-  <joint name="gps_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="gps_link" />
-    <origin xyz="0.55 0 1.3" rpy="0 0 0" />
-  </joint>
-  <link name="gps_link" />
-
-  <joint name="imu_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="imu_link" />
-    <origin xyz="0.55 0 1.3" rpy="0 0 0" />
-  </joint>
-  <link name="imu_link" />
-
-  <joint name="depth_camera_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="depth_camera_link" />
-    <origin xyz="2.0 0 2.0" rpy="0 ${radians(15)} 0" />
-  </joint>
-  <link name="depth_camera_link" />
-
-  <joint name="depth_camera_optical_joint" type="fixed">
-    <parent link="depth_camera_link" />
-    <child link="depth_camera_optical_link" />
-    <origin xyz="0 0 0" rpy="${radians(-90)} 0 ${radians(-90)}" />
-  </joint>
-  <link name="depth_camera_optical_link" />
+  <xacro:wamv_platform />
 
 </robot>

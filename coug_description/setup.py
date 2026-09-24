@@ -18,10 +18,6 @@ setup(
             os.path.join("share", package_name, "urdf/meshes/bluerov2"),
             glob("urdf/meshes/bluerov2/*.*"),
         ),
-        (
-            os.path.join("share", package_name, "urdf/meshes/wamv"),
-            glob("urdf/meshes/wamv/*.*"),
-        ),
     ],
     zip_safe=True,
     extras_require={
