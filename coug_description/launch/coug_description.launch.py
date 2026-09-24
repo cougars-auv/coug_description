@@ -25,7 +25,6 @@ from launch.substitution import Substitution
 from launch.substitutions import (
     Command,
     EnvironmentVariable,
-    EqualsSubstitution,
     LaunchConfiguration,
     NotEqualsSubstitution,
     OrSubstitution,
@@ -38,6 +37,10 @@ from launch_ros.parameter_descriptions import ParameterValue
 
 def agent_frame(agent_ns: str | Substitution, frame: str) -> PythonExpression:
     return PythonExpression(["'", agent_ns, f"/{frame}' if '", agent_ns, f"' != '' else '{frame}'"])
+
+
+def is_agent(agent_ns: LaunchConfiguration, *names: str) -> PythonExpression:
+    return PythonExpression(["'", agent_ns, "' in ", str(names)])
 
 
 def load_launch_params(path: str, top_key: str) -> dict[str, Any]:
@@ -105,7 +108,7 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Acti
             condition=IfCondition(
                 OrSubstitution(
                     NotEqualsSubstitution(use_sim_time, "true"),
-                    EqualsSubstitution(agent_ns, "coug2"),
+                    is_agent(agent_ns, "coug2", "wamv1holo"),
                 )
             ),
             parameters=[
