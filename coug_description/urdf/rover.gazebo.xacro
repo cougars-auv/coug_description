@@ -20,12 +20,14 @@
   <xacro:arg name="agent_ns" default="rover1gz" />
   <xacro:property name="agent_ns" value="$(arg agent_ns)" />
 
+  <xacro:arg name="tf_prefix" default="$(arg agent_ns)/" />
+
   <xacro:include filename="$(find coug_description)/urdf/rover.urdf.xacro" />
   <xacro:include filename="$(find coug_description)/urdf/sensors.gazebo.xacro" />
 
   <!-- TODO: Add wheel friction that matches the real rover better -->
   <xacro:macro name="wheel_friction" params="prefix">
-    <gazebo reference="${prefix}_wheel_link">
+    <gazebo reference="${tf_prefix}${prefix}_wheel_link">
       <mu1>1.0</mu1>
       <mu2>0.5</mu2>
       <fdir1>1 0 0</fdir1>
@@ -52,23 +54,22 @@
       <wheel_radius>${wheel_radius}</wheel_radius>
       <topic>/${agent_ns}/cmd_vel</topic>
       <odom_topic>/${agent_ns}/wheel/odom</odom_topic>
-      <child_frame_id>${agent_ns}/base_link</child_frame_id>
+      <child_frame_id>${tf_prefix}base_link</child_frame_id>
     </plugin>
 
     <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
       <topic>/${agent_ns}/joint_states</topic>
     </plugin>
 
-    <xacro:truth_odometry base_frame="${agent_ns}/base_link" />
+    <xacro:truth_odometry base_frame="${tf_prefix}base_link" />
 
-    <xacro:camera_odometry camera_frame="${agent_ns}/depth_camera_link"
-      xyz="${base_length/2 + mast_length/2 + depth_camera_xoff} 0 ${mast_height/2 - base_height/2 + depth_camera_zoff}"
-      rpy="0 ${depth_camera_pitch} 0" />
+    <xacro:camera_odometry camera_frame="${tf_prefix}depth_camera_link"
+      xyz="${rover_depth_camera_xyz}" rpy="${rover_depth_camera_rpy}" />
   </gazebo>
 
   <!-- Gazebo sensors -->
-  <xacro:imu_sensors link="imu_link" frame="${agent_ns}/imu_link" />
-  <xacro:gps_sensor link="gps_link" frame="${agent_ns}/gps_link" />
-  <xacro:depth_camera_sensor link="depth_camera_link" frame="${agent_ns}/depth_camera_link" />
+  <xacro:imu_sensors link="${tf_prefix}imu_link" />
+  <xacro:gps_sensor link="${tf_prefix}gps_link" />
+  <xacro:depth_camera_sensor link="${tf_prefix}depth_camera_link" />
 
 </robot>

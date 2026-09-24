@@ -25,42 +25,13 @@
   <!-- NOTE: These are exact HoloOcean socket locations as of 2.3.0 -->
 
   <!-- Payload -->
-  <joint name="depth_joint" type="fixed">
-    <parent link="${tf_prefix}base_link" />
-    <child link="${tf_prefix}depth_link" />
-    <origin xyz="0 0 0" rpy="0 ${radians(90)} 0" />
-  </joint>
-  <link name="${tf_prefix}depth_link" />
+  <xacro:sensor_frame name="depth" rpy="0 ${radians(90)} 0" />
 
-  <joint name="dvl_joint" type="fixed">
-    <parent link="${tf_prefix}base_link" />
-    <child link="${tf_prefix}dvl_link" />
-    <!-- Sensor FLU frame; FRD data converted upstream -->
-    <origin xyz="0 0 0" rpy="0 0 0" />
-  </joint>
-  <link name="${tf_prefix}dvl_link" />
+  <!-- Sensor FLU frame; FRD data converted upstream -->
+  <xacro:sensor_frame name="dvl" />
+  <xacro:dvl_beams layout="holoocean" />
 
-  <xacro:macro name="dvl_beam" params="prefix yaw">
-    <joint name="${prefix}_joint" type="fixed">
-      <parent link="${tf_prefix}dvl_link" />
-      <child link="${tf_prefix}${prefix}_link" />
-      <!-- +X axis down each DVL beam -->
-      <origin xyz="0 0 0" rpy="0 ${radians(67.5)} ${yaw}" />
-    </joint>
-    <link name="${tf_prefix}${prefix}_link" />
-  </xacro:macro>
-
-  <xacro:dvl_beam prefix="beam0" yaw="${radians(0)}" />
-  <xacro:dvl_beam prefix="beam1" yaw="${radians(90)}" />
-  <xacro:dvl_beam prefix="beam2" yaw="${radians(180)}" />
-  <xacro:dvl_beam prefix="beam3" yaw="${radians(-90)}" />
-
-  <joint name="modem_joint" type="fixed">
-    <parent link="${tf_prefix}base_link" />
-    <child link="${tf_prefix}modem_link" />
-    <!-- Sensor FLU frame; FRD data converted upstream -->
-    <origin xyz="0 0 0" rpy="0 ${radians(90)} 0" />
-  </joint>
-  <link name="${tf_prefix}modem_link" />
+  <!-- Sensor FLU frame; FRD data converted upstream -->
+  <xacro:sensor_frame name="modem" rpy="0 ${radians(90)} 0" />
 
 </robot>

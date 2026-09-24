@@ -61,13 +61,13 @@
   </xacro:macro>
 
   <!-- Sensors -->
-  <xacro:macro name="imu_sensors" params="link frame">
+  <xacro:macro name="imu_sensors" params="link">
     <gazebo reference="${link}">
       <sensor name="imu" type="imu">
         <always_on>true</always_on>
         <update_rate>100</update_rate>
         <topic>/${agent_ns}/camera/imu/data_raw</topic>
-        <gz_frame_id>${frame}</gz_frame_id>
+        <gz_frame_id>${link}</gz_frame_id>
         <imu>
           <enable_orientation>false</enable_orientation>
           <!-- 0.007 °/s/√Hz * √100 Hz -> 1.2e-3 rad/s
@@ -87,7 +87,7 @@
         <always_on>true</always_on>
         <update_rate>50</update_rate>
         <topic>/${agent_ns}/camera/imu/mag</topic>
-        <gz_frame_id>${frame}</gz_frame_id>
+        <gz_frame_id>${link}</gz_frame_id>
         <magnetometer>
           <!-- https://support.sbg-systems.com/sc/el/latest/ellipse-documentation/hardware-documentation/aiding-sensors -->
           <xacro:add_xyz_noise stddev="3.0e-7" />
@@ -96,13 +96,13 @@
     </gazebo>
   </xacro:macro>
 
-  <xacro:macro name="gps_sensor" params="link frame">
+  <xacro:macro name="gps_sensor" params="link">
     <gazebo reference="${link}">
       <sensor name="gps" type="navsat">
         <always_on>true</always_on>
         <update_rate>10</update_rate>
         <topic>/${agent_ns}/gps/fix</topic>
-        <gz_frame_id>${frame}</gz_frame_id>
+        <gz_frame_id>${link}</gz_frame_id>
         <navsat>
           <!-- https://content.u-blox.com/sites/default/files/documents/ZED-F9P-01B_DataSheet_UBX-17051259.pdf -->
           <position_sensing>
@@ -125,14 +125,14 @@
     </gazebo>
   </xacro:macro>
 
-  <xacro:macro name="depth_camera_sensor" params="link frame">
+  <xacro:macro name="depth_camera_sensor" params="link">
     <gazebo reference="${link}">
       <sensor name="depth_camera" type="rgbd_camera">
         <always_on>true</always_on>
         <!-- <update_rate>60</update_rate> -->
         <update_rate>20</update_rate>
         <topic>/${agent_ns}/camera/depth</topic>
-        <gz_frame_id>${frame}</gz_frame_id>
+        <gz_frame_id>${link}</gz_frame_id>
         <camera>
           <!-- https://www.stereolabs.com/en-us/products/zed-2i
             https://github.com/stereolabs/zed-ros2-wrapper/blob/v5.4.1/zed_wrapper/config/zed2i.yaml

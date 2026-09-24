@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+<!--
+ Copyright 2026 BYU FROST Lab
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:property name="base_radius" value="0.06" />
+  <xacro:property name="base_length" value="1.2" />
+  <xacro:property name="enclosure_length" value="0.5" />
+
+  <xacro:property name="handle_height" value="0.07" />
+  <xacro:property name="handle_width" value="0.04" />
+  <xacro:property name="handle_length" value="0.15" />
+
+  <xacro:property name="tray_height" value="0.02" />
+  <xacro:property name="tray_width" value="0.05" />
+  <xacro:property name="tray_length" value="0.38" />
+
+  <xacro:property name="fin_xoff" value="0.375" />
+  <xacro:property name="fin_height" value="0.09" />
+  <xacro:property name="fin_width" value="0.015" />
+  <xacro:property name="fin_length" value="0.09" />
+
+  <material name="White">
+    <color rgba="1 1 1 1" />
+  </material>
+  <material name="Blue">
+    <color rgba="0.196 0.6 0.8 1" />
+  </material>
+  <material name="Gray">
+    <color rgba="0.5 0.5 0.5 1" />
+  </material>
+  <material name="Acrylic">
+    <color rgba="0.9 0.9 0.9 0.5" />
+  </material>
+
+  <!-- Body -->
+  <link name="${tf_prefix}base_link" />
+
+  <joint name="clear_body_joint" type="fixed">
+    <parent link="${tf_prefix}base_link" />
+    <child link="${tf_prefix}clear_body_link" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+  <link name="${tf_prefix}clear_body_link">
+    <xacro:cylinder_shape color="Acrylic" radius="${base_radius}" length="${enclosure_length}"
+      rpy="0 ${radians(90)} 0" />
+  </link>
+
+  <joint name="front_body_joint" type="fixed">
+    <parent link="${tf_prefix}base_link" />
+    <child link="${tf_prefix}front_body_link" />
+    <origin xyz="${(base_length - 2*base_radius - enclosure_length)/4 + enclosure_length/2} 0 0" rpy="0 0 0" />
+  </joint>
+  <link name="${tf_prefix}front_body_link">
+    <xacro:cylinder_shape color="Blue" radius="${base_radius}" length="${(base_length - 2*base_radius - enclosure_length)/2}"
+      rpy="0 ${radians(90)} 0" />
+  </link>
+
+  <joint name="back_body_joint" type="fixed">
+    <parent link="${tf_prefix}base_link" />
+    <child link="${tf_prefix}back_body_link" />
+    <origin xyz="${-((base_length - 2*base_radius - enclosure_length)/4 + enclosure_length/2)} 0 0" rpy="0 0 0" />
+  </joint>
+  <link name="${tf_prefix}back_body_link">
+    <xacro:cylinder_shape color="Blue" radius="${base_radius}" length="${(base_length - 2*base_radius - enclosure_length)/2}"
+      rpy="0 ${radians(90)} 0" />
+  </link>
+
+  <!-- Handle -->
+  <joint name="handle_joint" type="fixed">
+    <parent link="${tf_prefix}base_link" />
+    <child link="${tf_prefix}handle_link" />
+    <origin xyz="0 0 ${base_radius + handle_height/2}" rpy="0 0 0" />
+  </joint>
+  <link name="${tf_prefix}handle_link">
+    <xacro:box_shape color="White" x="${handle_length}" y="${handle_width}" z="${handle_height}" />
+  </link>
+
+  <!-- Tray -->
+  <joint name="tray_joint" type="fixed">
+    <parent link="${tf_prefix}base_link" />
+    <child link="${tf_prefix}tray_link" />
+    <origin xyz="0 0 ${-(base_radius + tray_height/2)}" rpy="0 0 0" />
+  </joint>
+  <link name="${tf_prefix}tray_link">
+    <xacro:box_shape color="White" x="${tray_length}" y="${tray_width}" z="${tray_height}" />
+  </link>
+
+  <!-- Hull -->
+  <joint name="hull_joint" type="fixed">
+    <parent link="${tf_prefix}base_link" />
+    <child link="${tf_prefix}hull_link" />
+    <origin xyz="${(base_length-2*base_radius)/2} 0 0" rpy="0 0 0" />
+  </joint>
+  <link name="${tf_prefix}hull_link">
+    <xacro:sphere_shape color="Blue" radius="${base_radius}" />
+  </link>
+
+  <!-- Thruster -->
+  <joint name="thruster_joint" type="fixed">
+    <parent link="${tf_prefix}base_link" />
+    <child link="${tf_prefix}thruster_link" />
+    <origin xyz="${-(base_length-2*base_radius)/2} 0 0" rpy="0 0 0" />
+  </joint>
+  <link name="${tf_prefix}thruster_link">
+    <xacro:cylinder_shape color="Gray" radius="${base_radius*0.9}" length="${2*base_radius}"
+      rpy="0 ${radians(90)} 0" />
+  </link>
+
+  <!-- Fins -->
+  <xacro:macro name="fin" params="prefix rpy">
+    <joint name="${prefix}_fin_joint" type="revolute">
+      <parent link="${tf_prefix}base_link" />
+      <child link="${tf_prefix}${prefix}_fin_link" />
+      <origin xyz="${-fin_xoff} 0 0" rpy="${rpy}" />
+      <axis xyz="0 0 1" />
+      <limit lower="${radians(-45)}" upper="${radians(45)}" effort="10.0" velocity="1.0" />
+    </joint>
+    <link name="${tf_prefix}${prefix}_fin_link">
+      <xacro:box_shape color="White" x="${fin_length}" y="${fin_width}" z="${fin_height}"
+        xyz="${-fin_length/2} 0 ${base_radius+fin_height/2}" />
+    </link>
+  </xacro:macro>
+
+  <xacro:fin prefix="top" rpy="0 0 0" />
+  <xacro:fin prefix="left" rpy="${radians(120)} 0 0" />
+  <xacro:fin prefix="right" rpy="${radians(-120)} 0 0" />
+
+</robot>

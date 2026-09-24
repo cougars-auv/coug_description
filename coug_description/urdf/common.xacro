@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!--
+ Copyright 2026 BYU FROST Lab
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="box_shape" params="color x y z xyz:='0 0 0' rpy:='0 0 0' mass:=0">
+    <visual>
+      <origin xyz="${xyz}" rpy="${rpy}" />
+      <geometry>
+        <box size="${x} ${y} ${z}" />
+      </geometry>
+      <material name="${color}" />
+    </visual>
+    <xacro:if value="${mass > 0}">
+      <collision>
+        <origin xyz="${xyz}" rpy="${rpy}" />
+        <geometry>
+          <box size="${x} ${y} ${z}" />
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="${xyz}" rpy="${rpy}" />
+        <mass value="${mass}" />
+        <inertia ixx="${mass*(y*y + z*z)/12}" ixy="0" ixz="0" iyy="${mass*(x*x + z*z)/12}" iyz="0" izz="${mass*(x*x + y*y)/12}" />
+      </inertial>
+    </xacro:if>
+  </xacro:macro>
+
+  <xacro:macro name="cylinder_shape" params="color radius length xyz:='0 0 0' rpy:='0 0 0' mass:=0">
+    <visual>
+      <origin xyz="${xyz}" rpy="${rpy}" />
+      <geometry>
+        <cylinder radius="${radius}" length="${length}" />
+      </geometry>
+      <material name="${color}" />
+    </visual>
+    <xacro:if value="${mass > 0}">
+      <collision>
+        <origin xyz="${xyz}" rpy="${rpy}" />
+        <geometry>
+          <cylinder radius="${radius}" length="${length}" />
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="${xyz}" rpy="${rpy}" />
+        <mass value="${mass}" />
+        <inertia ixx="${mass*(3*radius*radius + length*length)/12}" ixy="0" ixz="0"
+          iyy="${mass*(3*radius*radius + length*length)/12}" iyz="0" izz="${mass*radius*radius/2}" />
+      </inertial>
+    </xacro:if>
+  </xacro:macro>
+
+  <xacro:macro name="sphere_shape" params="color radius xyz:='0 0 0' rpy:='0 0 0' mass:=0">
+    <visual>
+      <origin xyz="${xyz}" rpy="${rpy}" />
+      <geometry>
+        <sphere radius="${radius}" />
+      </geometry>
+      <material name="${color}" />
+    </visual>
+    <xacro:if value="${mass > 0}">
+      <collision>
+        <origin xyz="${xyz}" rpy="${rpy}" />
+        <geometry>
+          <sphere radius="${radius}" />
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="${xyz}" rpy="${rpy}" />
+        <mass value="${mass}" />
+        <inertia ixx="${2*mass*radius*radius/5}" ixy="0" ixz="0" iyy="${2*mass*radius*radius/5}" iyz="0" izz="${2*mass*radius*radius/5}" />
+      </inertial>
+    </xacro:if>
+  </xacro:macro>
+
+  <xacro:macro name="sensor_frame" params="name parent:=base xyz:='0 0 0' rpy:='0 0 0'">
+    <joint name="${name}_joint" type="fixed">
+      <parent link="${tf_prefix}${parent}_link" />
+      <child link="${tf_prefix}${name}_link" />
+      <origin xyz="${xyz}" rpy="${rpy}" />
+    </joint>
+    <link name="${tf_prefix}${name}_link" />
+  </xacro:macro>
+
+  <xacro:macro name="optical_frame" params="name">
+    <xacro:sensor_frame name="${name}_optical" parent="${name}"
+      rpy="${radians(-90)} 0 ${radians(-90)}" />
+  </xacro:macro>
+
+  <xacro:macro name="dvl_beams" params="layout">
+    <xacro:if value="${layout == 'a50'}">
+      <xacro:property name="yaws" value="${[-135, 135, 45, -45]}" />
+    </xacro:if>
+    <xacro:if value="${layout == 'holoocean'}">
+      <xacro:property name="yaws" value="${[0, 90, 180, -90]}" />
+    </xacro:if>
+    <xacro:sensor_frame name="beam0" parent="dvl" rpy="0 ${radians(67.5)} ${radians(yaws[0])}" />
+    <xacro:sensor_frame name="beam1" parent="dvl" rpy="0 ${radians(67.5)} ${radians(yaws[1])}" />
+    <xacro:sensor_frame name="beam2" parent="dvl" rpy="0 ${radians(67.5)} ${radians(yaws[2])}" />
+    <xacro:sensor_frame name="beam3" parent="dvl" rpy="0 ${radians(67.5)} ${radians(yaws[3])}" />
+  </xacro:macro>
+
+</robot>

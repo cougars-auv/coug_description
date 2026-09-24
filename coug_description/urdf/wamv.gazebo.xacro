@@ -34,15 +34,15 @@
       <topic>/${agent_ns}/joint_states</topic>
     </plugin>
 
-    <xacro:truth_odometry base_frame="${agent_ns}/base_link" />
+    <xacro:truth_odometry base_frame="${tf_prefix}base_link" />
 
-    <xacro:camera_odometry camera_frame="${agent_ns}/depth_camera_link"
+    <xacro:camera_odometry camera_frame="${tf_prefix}depth_camera_link"
       xyz="${wamv_depth_camera_xyz}" rpy="${wamv_depth_camera_rpy}" />
   </gazebo>
 
   <!-- Gazebo sensors -->
-  <xacro:imu_sensors link="${agent_ns}/imu_link" frame="${agent_ns}/imu_link" />
-  <xacro:gps_sensor link="${agent_ns}/gps_link" frame="${agent_ns}/gps_link" />
-  <xacro:depth_camera_sensor link="${agent_ns}/depth_camera_link" frame="${agent_ns}/depth_camera_link" />
+  <xacro:imu_sensors link="${tf_prefix}imu_link" />
+  <xacro:gps_sensor link="${tf_prefix}gps_link" />
+  <xacro:depth_camera_sensor link="${tf_prefix}depth_camera_link" />
 
 </robot>

@@ -20,6 +20,8 @@
   <xacro:arg name="tf_prefix" default="" />
   <xacro:property name="tf_prefix" value="$(arg tf_prefix)" />
 
+  <xacro:include filename="$(find coug_description)/urdf/common.xacro" />
+
   <xacro:property name="base_height" value="0.15" />
   <xacro:property name="base_width" value="0.5" />
   <xacro:property name="base_length" value="0.4" />
@@ -41,6 +43,10 @@
   <xacro:property name="depth_camera_xoff" value="0.12" />
   <xacro:property name="depth_camera_zoff" value="0.05" />
   <xacro:property name="depth_camera_pitch" value="0.1" />
+  <!-- Depth camera pose relative to base_link -->
+  <xacro:property name="rover_depth_camera_xyz"
+    value="${base_length/2 + mast_length/2 + depth_camera_xoff} 0 ${mast_height/2 - base_height/2 + depth_camera_zoff}" />
+  <xacro:property name="rover_depth_camera_rpy" value="0 ${depth_camera_pitch} 0" />
 
   <material name="LightGray">
     <color rgba="0.8 0.8 0.8 1" />
@@ -49,55 +55,12 @@
     <color rgba="0.2 0.2 0.2 1" />
   </material>
 
-  <!-- Helpful macros -->
-  <xacro:macro name="add_box" params="color mass xyz rpy x y z">
-    <visual>
-      <origin xyz="${xyz}" rpy="${rpy}" />
-      <geometry>
-        <box size="${x} ${y} ${z}" />
-      </geometry>
-      <material name="${color}" />
-    </visual>
-    <collision>
-      <origin xyz="${xyz}" rpy="${rpy}" />
-      <geometry>
-        <box size="${x} ${y} ${z}" />
-      </geometry>
-    </collision>
-    <inertial>
-      <origin xyz="${xyz}" rpy="${rpy}" />
-      <mass value="${mass}" />
-      <inertia ixx="${mass*(y*y + z*z)/12}" ixy="0" ixz="0" iyy="${mass*(x*x + z*z)/12}" iyz="0" izz="${mass*(x*x + y*y)/12}" />
-    </inertial>
-  </xacro:macro>
-
-  <xacro:macro name="add_cylinder" params="color mass xyz rpy radius length">
-    <visual>
-      <origin xyz="${xyz}" rpy="${rpy}" />
-      <geometry>
-        <cylinder radius="${radius}" length="${length}" />
-      </geometry>
-      <material name="${color}" />
-    </visual>
-    <collision>
-      <origin xyz="${xyz}" rpy="${rpy}" />
-      <geometry>
-        <cylinder radius="${radius}" length="${length}" />
-      </geometry>
-    </collision>
-    <inertial>
-      <origin xyz="${xyz}" rpy="${rpy}" />
-      <mass value="${mass}" />
-      <inertia ixx="${mass*(3*radius*radius + length*length)/12}" ixy="0" ixz="0"
-        iyy="${mass*(3*radius*radius + length*length)/12}" iyz="0" izz="${mass*radius*radius/2}" />
-    </inertial>
-  </xacro:macro>
-
   <!-- TODO: Compare this with the new 2026 URDF -->
 
   <!-- Chassis -->
   <link name="${tf_prefix}base_link">
-    <xacro:add_box color="LightGray" mass="${base_mass}" xyz="0 0 0" rpy="0 0 0" x="${base_length}" y="${base_width}" z="${base_height}" />
+    <xacro:box_shape color="LightGray" x="${base_length}" y="${base_width}" z="${base_height}"
+      mass="${base_mass}" />
   </link>
 
   <!-- Wheels -->
@@ -110,8 +73,8 @@
       <dynamics damping="0.05" friction="0.1" />
     </joint>
     <link name="${tf_prefix}${prefix}_wheel_link">
-      <xacro:add_cylinder color="DarkGray" mass="${wheel_mass}" xyz="0 0 0" rpy="${radians(90)} 0 0"
-        radius="${wheel_radius}" length="${wheel_width}" />
+      <xacro:cylinder_shape color="DarkGray" radius="${wheel_radius}" length="${wheel_width}"
+        rpy="${radians(90)} 0 0" mass="${wheel_mass}" />
     </link>
   </xacro:macro>
 
@@ -129,36 +92,15 @@
     <origin xyz="${base_length/2 + mast_length/2} 0 ${mast_height/2 - base_height/2}" rpy="0 0 0" />
   </joint>
   <link name="${tf_prefix}mast_link">
-    <xacro:add_box color="LightGray" mass="${mast_mass}" xyz="0 0 0" rpy="0 0 0" x="${mast_length}" y="${mast_width}" z="${mast_height}" />
+    <xacro:box_shape color="LightGray" x="${mast_length}" y="${mast_width}" z="${mast_height}"
+      mass="${mast_mass}" />
   </link>
 
   <!-- Sensors -->
-  <joint name="depth_camera_joint" type="fixed">
-    <parent link="${tf_prefix}mast_link" />
-    <child link="${tf_prefix}depth_camera_link" />
-    <origin xyz="${depth_camera_xoff} 0 ${depth_camera_zoff}" rpy="0 ${depth_camera_pitch} 0" />
-  </joint>
-  <link name="${tf_prefix}depth_camera_link" />
-
-  <joint name="depth_camera_optical_joint" type="fixed">
-    <parent link="${tf_prefix}depth_camera_link" />
-    <child link="${tf_prefix}depth_camera_optical_link" />
-    <origin xyz="0 0 0" rpy="${radians(-90)} 0 ${radians(-90)}" />
-  </joint>
-  <link name="${tf_prefix}depth_camera_optical_link" />
-
-  <joint name="imu_joint" type="fixed">
-    <parent link="${tf_prefix}depth_camera_link" />
-    <child link="${tf_prefix}imu_link" />
-    <origin xyz="0 0 0" rpy="0 0 0" />
-  </joint>
-  <link name="${tf_prefix}imu_link" />
-
-  <joint name="gps_joint" type="fixed">
-    <parent link="${tf_prefix}base_link" />
-    <child link="${tf_prefix}gps_link" />
-    <origin xyz="${-base_length/2} 0 ${base_height/2}" rpy="0 0 0" />
-  </joint>
-  <link name="${tf_prefix}gps_link" />
+  <xacro:sensor_frame name="depth_camera" parent="mast" xyz="${depth_camera_xoff} 0 ${depth_camera_zoff}"
+    rpy="${rover_depth_camera_rpy}" />
+  <xacro:optical_frame name="depth_camera" />
+  <xacro:sensor_frame name="imu" parent="depth_camera" />
+  <xacro:sensor_frame name="gps" xyz="${-base_length/2} 0 ${base_height/2}" />
 
 </robot>

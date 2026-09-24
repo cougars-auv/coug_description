@@ -20,174 +20,41 @@
   <xacro:arg name="tf_prefix" default="" />
   <xacro:property name="tf_prefix" value="$(arg tf_prefix)" />
 
-  <xacro:property name="mass" value="9.5" />
-  <xacro:property name="ixx" value="0.16" />
-  <xacro:property name="iyy" value="0.17" />
-  <xacro:property name="izz" value="0.12" />
-
-  <link name="${tf_prefix}base_link">
-    <visual>
-      <geometry>
-        <mesh filename="package://coug_description/urdf/meshes/bluerov2/bluerov2.dae" scale="0.025 0.025 0.025" />
-      </geometry>
-    </visual>
-  </link>
-
-  <xacro:macro name="thruster" params="prefix xyz rpy mesh mesh_rpy">
-    <joint name="${prefix}_joint" type="fixed">
-      <parent link="${tf_prefix}base_link" />
-      <child link="${tf_prefix}${prefix}_link" />
-      <origin xyz="${xyz}" rpy="${rpy}" />
-    </joint>
-    <link name="${tf_prefix}${prefix}_link">
-      <visual>
-        <origin xyz="0 0 0" rpy="${mesh_rpy}" />
-        <geometry>
-          <mesh filename="package://coug_description/urdf/meshes/bluerov2/${mesh}" />
-        </geometry>
-      </visual>
-    </link>
-  </xacro:macro>
-
-  <xacro:thruster prefix="thruster1" xyz="0.14 -0.092 0.0" rpy="${radians(-90)} ${radians(90)} ${radians(-45)}"
-    mesh="t200_ccw_prop.dae" mesh_rpy="${radians(-90)} 0 0" />
-  <xacro:thruster prefix="thruster2" xyz="0.14 0.092 0.0" rpy="${radians(-90)} ${radians(90)} ${radians(-135)}"
-    mesh="t200_ccw_prop.dae" mesh_rpy="${radians(-90)} 0 0" />
-  <xacro:thruster prefix="thruster3" xyz="-0.14 -0.092 0.0" rpy="${radians(-90)} ${radians(90)} ${radians(45)}"
-    mesh="t200_cw_prop.dae" mesh_rpy="${radians(90)} 0 0" />
-  <xacro:thruster prefix="thruster4" xyz="-0.14 0.092 0.0" rpy="${radians(-90)} ${radians(90)} ${radians(135)}"
-    mesh="t200_cw_prop.dae" mesh_rpy="${radians(90)} 0 0" />
-  <xacro:thruster prefix="thruster5" xyz="0.118 -0.215 0.064" rpy="0 0 0"
-    mesh="t200_ccw_prop.dae" mesh_rpy="${radians(-90)} 0 ${radians(90)}" />
-  <xacro:thruster prefix="thruster6" xyz="0.118 0.215 0.064" rpy="0 0 0"
-    mesh="t200_cw_prop.dae" mesh_rpy="${radians(90)} 0 ${radians(90)}" />
-  <xacro:thruster prefix="thruster7" xyz="-0.118 -0.215 0.064" rpy="0 0 0"
-    mesh="t200_cw_prop.dae" mesh_rpy="${radians(90)} 0 ${radians(90)}" />
-  <xacro:thruster prefix="thruster8" xyz="-0.118 0.215 0.064" rpy="0 0 0"
-    mesh="t200_ccw_prop.dae" mesh_rpy="${radians(-90)} 0 ${radians(90)}" />
+  <xacro:include filename="$(find coug_description)/urdf/common.xacro" />
+  <xacro:include filename="$(find coug_description)/urdf/bluerov2_body.xacro" />
 
   <!-- NOTE: These are exact HoloOcean socket locations as of 2.3.0 -->
 
   <!-- COM -->
-  <joint name="com_joint" type="fixed">
-    <parent link="${tf_prefix}base_link" />
-    <child link="${tf_prefix}com_link" />
-    <origin xyz="0 0 0" rpy="0 0 0" />
-  </joint>
-  <link name="${tf_prefix}com_link" />
+  <xacro:sensor_frame name="com" />
+  <xacro:sensor_frame name="gps" parent="com" />
 
-  <joint name="gps_joint" type="fixed">
-    <parent link="${tf_prefix}com_link" />
-    <child link="${tf_prefix}gps_link" />
-    <origin xyz="0 0 0" rpy="0 0 0" />
-  </joint>
-  <link name="${tf_prefix}gps_link" />
-
-  <joint name="modem_joint" type="fixed">
-    <parent link="${tf_prefix}com_link" />
-    <child link="${tf_prefix}modem_link" />
-    <!-- Sensor FLU frame; FRD data converted upstream -->
-    <origin xyz="0 0 0" rpy="0 0 0" />
-  </joint>
-  <link name="${tf_prefix}modem_link" />
+  <!-- Sensor FLU frame; FRD data converted upstream -->
+  <xacro:sensor_frame name="modem" parent="com" />
 
   <!-- IMUSocket -->
-  <joint name="imu_joint" type="fixed">
-    <parent link="${tf_prefix}com_link" />
-    <child link="${tf_prefix}imu_link" />
-    <!-- IMU pitched 180 deg in socket due to robot_localization gravity mishandling bug -->
-    <origin xyz="0.11 0 0.065" rpy="0 0 0" />
-  </joint>
-  <link name="${tf_prefix}imu_link" />
+  <!-- IMU pitched 180 deg in socket due to robot_localization gravity mishandling bug -->
+  <xacro:sensor_frame name="imu" parent="com" xyz="0.11 0 0.065" />
 
   <!-- DepthSocket -->
-  <joint name="depth_joint" type="fixed">
-    <parent link="${tf_prefix}com_link" />
-    <child link="${tf_prefix}depth_link" />
-    <origin xyz="-0.17 0 0.06" rpy="0 0 0" />
-  </joint>
-  <link name="${tf_prefix}depth_link" />
+  <xacro:sensor_frame name="depth" parent="com" xyz="-0.17 0 0.06" />
 
   <!-- DVLSocket -->
-  <joint name="dvl_joint" type="fixed">
-    <parent link="${tf_prefix}com_link" />
-    <child link="${tf_prefix}dvl_link" />
-    <!-- Sensor FLU frame; FRD data converted upstream -->
-    <origin xyz="0 -0.1 -0.1" rpy="0 0 0" />
-  </joint>
-  <link name="${tf_prefix}dvl_link" />
+  <!-- Sensor FLU frame; FRD data converted upstream -->
+  <xacro:sensor_frame name="dvl" parent="com" xyz="0 -0.1 -0.1" />
+  <xacro:dvl_beams layout="holoocean" />
 
-  <xacro:macro name="dvl_beam" params="prefix yaw">
-    <joint name="${prefix}_joint" type="fixed">
-      <parent link="${tf_prefix}dvl_link" />
-      <child link="${tf_prefix}${prefix}_link" />
-      <!-- +X axis down each DVL beam -->
-      <origin xyz="0 0 0" rpy="0 ${radians(67.5)} ${yaw}" />
-    </joint>
-    <link name="${tf_prefix}${prefix}_link" />
-  </xacro:macro>
-
-  <xacro:dvl_beam prefix="beam0" yaw="${radians(0)}" />
-  <xacro:dvl_beam prefix="beam1" yaw="${radians(90)}" />
-  <xacro:dvl_beam prefix="beam2" yaw="${radians(180)}" />
-  <xacro:dvl_beam prefix="beam3" yaw="${radians(-90)}" />
-
-  <joint name="front_stereo_joint" type="fixed">
-    <parent link="${tf_prefix}dvl_link" />
-    <child link="${tf_prefix}front_stereo_link" />
-    <origin xyz="0.1 0 0" rpy="0 ${radians(90)} 0" />
-  </joint>
-  <link name="${tf_prefix}front_stereo_link" />
-
-  <joint name="front_stereo_optical_joint" type="fixed">
-    <parent link="${tf_prefix}front_stereo_link" />
-    <child link="${tf_prefix}front_stereo_optical_link" />
-    <origin xyz="0 0 0" rpy="${radians(-90)} 0 ${radians(-90)}" />
-  </joint>
-  <link name="${tf_prefix}front_stereo_optical_link" />
-
-  <joint name="back_stereo_joint" type="fixed">
-    <parent link="${tf_prefix}dvl_link" />
-    <child link="${tf_prefix}back_stereo_link" />
-    <origin xyz="-0.1 0 0" rpy="0 ${radians(90)} 0" />
-  </joint>
-  <link name="${tf_prefix}back_stereo_link" />
-
-  <joint name="back_stereo_optical_joint" type="fixed">
-    <parent link="${tf_prefix}back_stereo_link" />
-    <child link="${tf_prefix}back_stereo_optical_link" />
-    <origin xyz="0 0 0" rpy="${radians(-90)} 0 ${radians(-90)}" />
-  </joint>
-  <link name="${tf_prefix}back_stereo_optical_link" />
-
-  <joint name="depth_camera_joint" type="fixed">
-    <parent link="${tf_prefix}dvl_link" />
-    <child link="${tf_prefix}depth_camera_link" />
-    <origin xyz="0 0 0" rpy="0 ${radians(90)} 0" />
-  </joint>
-  <link name="${tf_prefix}depth_camera_link" />
-
-  <joint name="depth_camera_optical_joint" type="fixed">
-    <parent link="${tf_prefix}depth_camera_link" />
-    <child link="${tf_prefix}depth_camera_optical_link" />
-    <origin xyz="0 0 0" rpy="${radians(-90)} 0 ${radians(-90)}" />
-  </joint>
-  <link name="${tf_prefix}depth_camera_optical_link" />
+  <xacro:sensor_frame name="front_stereo" parent="dvl" xyz="0.1 0 0" rpy="0 ${radians(90)} 0" />
+  <xacro:optical_frame name="front_stereo" />
+  <xacro:sensor_frame name="back_stereo" parent="dvl" xyz="-0.1 0 0" rpy="0 ${radians(90)} 0" />
+  <xacro:optical_frame name="back_stereo" />
+  <xacro:sensor_frame name="depth_camera" parent="dvl" rpy="0 ${radians(90)} 0" />
+  <xacro:optical_frame name="depth_camera" />
 
   <!-- CameraSocket -->
-  <joint name="camera_joint" type="fixed">
-    <parent link="${tf_prefix}com_link" />
-    <child link="${tf_prefix}camera_link" />
-    <origin xyz="0.21 0 0.06" rpy="0 0 0" />
-  </joint>
-  <link name="${tf_prefix}camera_link" />
+  <xacro:sensor_frame name="camera" parent="com" xyz="0.21 0 0.06" />
 
   <!-- SonarSocket -->
-  <joint name="sonar_joint" type="fixed">
-    <parent link="${tf_prefix}com_link" />
-    <child link="${tf_prefix}sonar_link" />
-    <origin xyz="0.15 0 0.14" rpy="0 0 0" />
-  </joint>
-  <link name="${tf_prefix}sonar_link" />
+  <xacro:sensor_frame name="sonar" parent="com" xyz="0.15 0 0.14" />
 
 </robot>
