@@ -20,51 +20,7 @@
   <xacro:arg name="tf_prefix" default="" />
   <xacro:property name="tf_prefix" value="$(arg tf_prefix)" />
 
-  <xacro:include filename="$(find coug_description)/urdf/wamv_platform.xacro" />
-
-  <xacro:property name="mass" value="9.5" />
-  <xacro:property name="ixx" value="0.16" />
-  <xacro:property name="iyy" value="0.17" />
-  <xacro:property name="izz" value="0.12" />
-
-  <link name="${tf_prefix}base_link">
-    <visual>
-      <geometry>
-        <mesh filename="package://wamv_description/models/WAM-V-Base/mesh/WAM-V-Base.dae" />
-      </geometry>
-    </visual>
-  </link>
-
-  <xacro:macro name="engine" params="prefix y">
-    <joint name="${prefix}_engine_joint" type="fixed">
-      <parent link="${tf_prefix}base_link" />
-      <child link="${tf_prefix}${prefix}_engine_link" />
-      <origin xyz="-2.373776 ${y} 0.318237" rpy="0 0 0" />
-    </joint>
-    <link name="${tf_prefix}${prefix}_engine_link">
-      <visual>
-        <geometry>
-          <mesh filename="package://wamv_description/models/engine/mesh/engine.dae" />
-        </geometry>
-      </visual>
-    </link>
-
-    <joint name="${prefix}_propeller_joint" type="fixed">
-      <parent link="${tf_prefix}${prefix}_engine_link" />
-      <child link="${tf_prefix}${prefix}_propeller_link" />
-      <origin xyz="-0.278156 0 -0.509371" rpy="0 0 0" />
-    </joint>
-    <link name="${tf_prefix}${prefix}_propeller_link">
-      <visual>
-        <geometry>
-          <mesh filename="package://wamv_description/models/propeller/mesh/propeller.dae" />
-        </geometry>
-      </visual>
-    </link>
-  </xacro:macro>
-
-  <xacro:engine prefix="left" y="1.027135" />
-  <xacro:engine prefix="right" y="-1.027135" />
+  <xacro:include filename="$(find coug_description)/urdf/wamv.urdf.xacro" />
 
   <!-- NOTE: These are exact HoloOcean socket locations as of 2.3.0 -->
 
@@ -106,8 +62,5 @@
     <origin xyz="0 0 0" rpy="0 ${radians(90)} 0" />
   </joint>
   <link name="${tf_prefix}modem_link" />
-
-  <!-- Platform -->
-  <xacro:wamv_platform tf_prefix="${tf_prefix}" />
 
 </robot>

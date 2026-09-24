@@ -20,21 +20,20 @@
   <xacro:arg name="agent_ns" default="wamv1gz" />
   <xacro:property name="agent_ns" value="$(arg agent_ns)" />
 
-  <xacro:arg name="namespace" default="$(arg agent_ns)" />
-  <xacro:property name="namespace" value="$(arg namespace)" scope="global" />
+  <xacro:arg name="tf_prefix" default="$(arg agent_ns)/" />
 
-  <xacro:include filename="$(find wamv_gazebo)/urdf/dynamics/wamv_gazebo_dynamics_plugin.xacro" />
-  <xacro:include filename="$(find wamv_description)/urdf/wamv_base.urdf.xacro" />
-  <xacro:include filename="$(find wamv_gazebo)/urdf/thruster_layouts/wamv_aft_thrusters.xacro" />
-  <xacro:usv_dynamics_gazebo name="wamv_dynamics_plugin" />
-
-  <xacro:include filename="$(find coug_description)/urdf/wamv_platform.xacro" />
+  <xacro:include filename="$(find coug_description)/urdf/wamv.urdf.xacro" />
   <xacro:include filename="$(find coug_description)/urdf/sensors.gazebo.xacro" />
 
-  <xacro:wamv_platform tf_prefix="${namespace}/" />
+  <xacro:include filename="$(find wamv_gazebo)/urdf/dynamics/wamv_gazebo_dynamics_plugin.xacro" />
+  <xacro:usv_dynamics_gazebo name="wamv_dynamics_plugin" />
 
   <!-- Gazebo plugins -->
   <gazebo>
+    <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+      <topic>/${agent_ns}/joint_states</topic>
+    </plugin>
+
     <xacro:truth_odometry base_frame="${agent_ns}/base_link" />
 
     <xacro:camera_odometry camera_frame="${agent_ns}/depth_camera_link"
@@ -42,8 +41,8 @@
   </gazebo>
 
   <!-- Gazebo sensors -->
-  <xacro:imu_sensors link="${namespace}/imu_link" frame="${agent_ns}/imu_link" />
-  <xacro:gps_sensor link="${namespace}/gps_link" frame="${agent_ns}/gps_link" />
-  <xacro:depth_camera_sensor link="${namespace}/depth_camera_link" frame="${agent_ns}/depth_camera_link" />
+  <xacro:imu_sensors link="${agent_ns}/imu_link" frame="${agent_ns}/imu_link" />
+  <xacro:gps_sensor link="${agent_ns}/gps_link" frame="${agent_ns}/gps_link" />
+  <xacro:depth_camera_sensor link="${agent_ns}/depth_camera_link" frame="${agent_ns}/depth_camera_link" />
 
 </robot>
