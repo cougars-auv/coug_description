@@ -15,7 +15,10 @@
  limitations under the License.
 -->
 
-<robot name="couguv" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="couguv" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:arg name="tf_prefix" default="" />
+  <xacro:property name="tf_prefix" value="$(arg tf_prefix)" />
 
   <xacro:property name="base_radius" value="0.06" />
   <xacro:property name="base_length" value="1.2" />
@@ -81,88 +84,88 @@
 
   <xacro:macro name="fin" params="prefix rpy">
     <joint name="${prefix}_fin_joint" type="revolute">
-      <parent link="base_link" />
-      <child link="${prefix}_fin_link" />
+      <parent link="${tf_prefix}base_link" />
+      <child link="${tf_prefix}${prefix}_fin_link" />
       <origin xyz="${-fin_xoff} 0 0" rpy="${rpy}" />
       <axis xyz="0 0 1" />
       <limit lower="${radians(-45)}" upper="${radians(45)}" effort="10.0" velocity="1.0" />
     </joint>
-    <link name="${prefix}_fin_link">
+    <link name="${tf_prefix}${prefix}_fin_link">
       <xacro:add_box color="White" xyz="${-fin_length/2} 0 ${base_radius+fin_height/2}" rpy="0 0 0"
         x="${fin_length}" y="${fin_width}" z="${fin_height}" />
     </link>
   </xacro:macro>
 
   <!-- Body -->
-  <link name="base_link" />
+  <link name="${tf_prefix}base_link" />
 
   <joint name="clear_body_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="clear_body_link" />
+    <parent link="${tf_prefix}base_link" />
+    <child link="${tf_prefix}clear_body_link" />
     <origin xyz="0 0 0" rpy="0 0 0" />
   </joint>
-  <link name="clear_body_link">
+  <link name="${tf_prefix}clear_body_link">
     <xacro:add_cylinder color="Acrylic" xyz="0 0 0" rpy="0 ${radians(90)} 0"
       radius="${base_radius}" length="${enclosure_length}" />
   </link>
 
   <joint name="front_body_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="front_body_link" />
+    <parent link="${tf_prefix}base_link" />
+    <child link="${tf_prefix}front_body_link" />
     <origin xyz="${(base_length - 2*base_radius - enclosure_length)/4 + enclosure_length/2} 0 0" rpy="0 0 0" />
   </joint>
-  <link name="front_body_link">
+  <link name="${tf_prefix}front_body_link">
     <xacro:add_cylinder color="Blue" xyz="0 0 0" rpy="0 ${radians(90)} 0" radius="${base_radius}"
       length="${(base_length - 2*base_radius - enclosure_length)/2}" />
   </link>
 
   <joint name="back_body_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="back_body_link" />
+    <parent link="${tf_prefix}base_link" />
+    <child link="${tf_prefix}back_body_link" />
     <origin xyz="${-((base_length - 2*base_radius - enclosure_length)/4 + enclosure_length/2)} 0 0" rpy="0 0 0" />
   </joint>
-  <link name="back_body_link">
+  <link name="${tf_prefix}back_body_link">
     <xacro:add_cylinder color="Blue" xyz="0 0 0" rpy="0 ${radians(90)} 0" radius="${base_radius}"
       length="${(base_length - 2*base_radius - enclosure_length)/2}" />
   </link>
 
   <!-- Handle -->
   <joint name="handle_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="handle_link" />
+    <parent link="${tf_prefix}base_link" />
+    <child link="${tf_prefix}handle_link" />
     <origin xyz="0 0 ${base_radius + handle_height/2}" rpy="0 0 0" />
   </joint>
-  <link name="handle_link">
+  <link name="${tf_prefix}handle_link">
     <xacro:add_box color="White" xyz="0 0 0" rpy="0 0 0" x="${handle_length}" y="${handle_width}" z="${handle_height}" />
   </link>
 
   <!-- Tray -->
   <joint name="tray_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="tray_link" />
+    <parent link="${tf_prefix}base_link" />
+    <child link="${tf_prefix}tray_link" />
     <origin xyz="0 0 ${-(base_radius + tray_height/2)}" rpy="0 0 0" />
   </joint>
-  <link name="tray_link">
+  <link name="${tf_prefix}tray_link">
     <xacro:add_box color="White" xyz="0 0 0" rpy="0 0 0" x="${tray_length}" y="${tray_width}" z="${tray_height}" />
   </link>
 
   <!-- Hull -->
   <joint name="hull_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="hull_link" />
+    <parent link="${tf_prefix}base_link" />
+    <child link="${tf_prefix}hull_link" />
     <origin xyz="${(base_length-2*base_radius)/2} 0 0" rpy="0 0 0" />
   </joint>
-  <link name="hull_link">
+  <link name="${tf_prefix}hull_link">
     <xacro:add_sphere color="Blue" xyz="0 0 0" rpy="0 0 0" radius="${base_radius}" />
   </link>
 
   <!-- Thruster -->
   <joint name="thruster_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="thruster_link" />
+    <parent link="${tf_prefix}base_link" />
+    <child link="${tf_prefix}thruster_link" />
     <origin xyz="${-(base_length-2*base_radius)/2} 0 0" rpy="0 0 0" />
   </joint>
-  <link name="thruster_link">
+  <link name="${tf_prefix}thruster_link">
     <xacro:add_cylinder color="Gray" xyz="0 0 0" rpy="0 ${radians(90)} 0"
       radius="${base_radius*0.9}" length="${2*base_radius}" />
   </link>
@@ -176,52 +179,52 @@
 
   <!-- COM -->
   <joint name="com_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="com_link" />
+    <parent link="${tf_prefix}base_link" />
+    <child link="${tf_prefix}com_link" />
     <origin xyz="0 0 0" rpy="0 0 0" />
   </joint>
-  <link name="com_link" />
+  <link name="${tf_prefix}com_link" />
 
   <joint name="gps_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="gps_link" />
+    <parent link="${tf_prefix}base_link" />
+    <child link="${tf_prefix}gps_link" />
     <origin xyz="0 0 0" rpy="0 0 0" />
   </joint>
-  <link name="gps_link" />
+  <link name="${tf_prefix}gps_link" />
 
   <!-- IMUSocket -->
   <joint name="imu_joint" type="fixed">
-    <parent link="com_link" />
-    <child link="imu_link" />
+    <parent link="${tf_prefix}com_link" />
+    <child link="${tf_prefix}imu_link" />
     <origin xyz="0.504 0 -0.053" rpy="0 0 0" />
   </joint>
-  <link name="imu_link" />
+  <link name="${tf_prefix}imu_link" />
 
   <!-- DepthSocket -->
   <joint name="depth_joint" type="fixed">
-    <parent link="com_link" />
-    <child link="depth_link" />
+    <parent link="${tf_prefix}com_link" />
+    <child link="${tf_prefix}depth_link" />
     <origin xyz="0.162 0 0" rpy="0 0 0" />
   </joint>
-  <link name="depth_link" />
+  <link name="${tf_prefix}depth_link" />
 
   <!-- DVLSocket -->
   <joint name="dvl_joint" type="fixed">
-    <parent link="com_link" />
-    <child link="dvl_link" />
+    <parent link="${tf_prefix}com_link" />
+    <child link="${tf_prefix}dvl_link" />
     <!-- Sensor FLU frame; FRD data converted upstream -->
     <origin xyz="0.504 0 -0.053" rpy="0 0 0" />
   </joint>
-  <link name="dvl_link" />
+  <link name="${tf_prefix}dvl_link" />
 
   <xacro:macro name="dvl_beam" params="prefix yaw">
     <joint name="${prefix}_joint" type="fixed">
-      <parent link="dvl_link" />
-      <child link="${prefix}_link" />
+      <parent link="${tf_prefix}dvl_link" />
+      <child link="${tf_prefix}${prefix}_link" />
       <!-- +X axis down each DVL beam -->
       <origin xyz="0 0 0" rpy="0 ${radians(67.5)} ${yaw}" />
     </joint>
-    <link name="${prefix}_link" />
+    <link name="${tf_prefix}${prefix}_link" />
   </xacro:macro>
 
   <xacro:dvl_beam prefix="beam0" yaw="${radians(0)}" />
@@ -230,34 +233,34 @@
   <xacro:dvl_beam prefix="beam3" yaw="${radians(-90)}" />
 
   <joint name="depth_camera_joint" type="fixed">
-    <parent link="dvl_link" />
-    <child link="depth_camera_link" />
+    <parent link="${tf_prefix}dvl_link" />
+    <child link="${tf_prefix}depth_camera_link" />
     <origin xyz="0 0 0" rpy="0 ${radians(90)} 0" />
   </joint>
-  <link name="depth_camera_link" />
+  <link name="${tf_prefix}depth_camera_link" />
 
   <joint name="depth_camera_optical_joint" type="fixed">
-    <parent link="depth_camera_link" />
-    <child link="depth_camera_optical_link" />
+    <parent link="${tf_prefix}depth_camera_link" />
+    <child link="${tf_prefix}depth_camera_optical_link" />
     <origin xyz="0 0 0" rpy="${radians(-90)} 0 ${radians(-90)}" />
   </joint>
-  <link name="depth_camera_optical_link" />
+  <link name="${tf_prefix}depth_camera_optical_link" />
 
   <!-- AcousticModemSocket -->
   <joint name="modem_joint" type="fixed">
-    <parent link="com_link" />
-    <child link="modem_link" />
+    <parent link="${tf_prefix}com_link" />
+    <child link="${tf_prefix}modem_link" />
     <!-- Sensor FLU frame; FRD data converted upstream -->
     <origin xyz="0.3785 0 -0.0985" rpy="0 0 0" />
   </joint>
-  <link name="modem_link" />
+  <link name="${tf_prefix}modem_link" />
 
   <!-- CameraSocket -->
   <joint name="camera_joint" type="fixed">
-    <parent link="com_link" />
-    <child link="camera_link" />
+    <parent link="${tf_prefix}com_link" />
+    <child link="${tf_prefix}camera_link" />
     <origin xyz="0.1 0 0" rpy="0 ${radians(90)} 0" />
   </joint>
-  <link name="camera_link" />
+  <link name="${tf_prefix}camera_link" />
 
 </robot>

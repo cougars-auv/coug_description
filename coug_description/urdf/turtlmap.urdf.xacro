@@ -15,14 +15,17 @@
  limitations under the License.
 -->
 
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="bluerov2">
+<robot name="turtlmap" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:arg name="tf_prefix" default="" />
+  <xacro:property name="tf_prefix" value="$(arg tf_prefix)" />
 
   <xacro:property name="mass" value="9.5" />
   <xacro:property name="ixx" value="0.16" />
   <xacro:property name="iyy" value="0.17" />
   <xacro:property name="izz" value="0.12" />
 
-  <link name="base_link">
+  <link name="${tf_prefix}base_link">
     <visual>
       <geometry>
         <mesh filename="package://coug_description/urdf/meshes/bluerov2/bluerov2.dae" scale="0.025 0.025 0.025" />
@@ -32,11 +35,11 @@
 
   <xacro:macro name="thruster" params="prefix xyz rpy mesh mesh_rpy">
     <joint name="${prefix}_joint" type="fixed">
-      <parent link="base_link" />
-      <child link="${prefix}_link" />
+      <parent link="${tf_prefix}base_link" />
+      <child link="${tf_prefix}${prefix}_link" />
       <origin xyz="${xyz}" rpy="${rpy}" />
     </joint>
-    <link name="${prefix}_link">
+    <link name="${tf_prefix}${prefix}_link">
       <visual>
         <origin xyz="0 0 0" rpy="${mesh_rpy}" />
         <geometry>
@@ -65,36 +68,36 @@
 
   <!-- Sensors -->
   <joint name="imu_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="imu_link" />
+    <parent link="${tf_prefix}base_link" />
+    <child link="${tf_prefix}imu_link" />
     <!-- Sensor FRD frame -->
     <origin xyz="0 0 0" rpy="${radians(90)} 0 ${radians(90)}" />
   </joint>
-  <link name="imu_link" />
+  <link name="${tf_prefix}imu_link" />
 
   <joint name="depth_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="depth_link" />
+    <parent link="${tf_prefix}base_link" />
+    <child link="${tf_prefix}depth_link" />
     <origin xyz="0 0 0" rpy="0 0 0" />
   </joint>
-  <link name="depth_link" />
+  <link name="${tf_prefix}depth_link" />
 
   <joint name="dvl_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="dvl_link" />
+    <parent link="${tf_prefix}base_link" />
+    <child link="${tf_prefix}dvl_link" />
     <!-- Sensor FLU frame; FRD data converted upstream -->
     <origin xyz="0.113 0.001 -0.04" rpy="0 0 0" />
   </joint>
-  <link name="dvl_link" />
+  <link name="${tf_prefix}dvl_link" />
 
   <xacro:macro name="dvl_beam" params="prefix yaw">
     <joint name="${prefix}_joint" type="fixed">
-      <parent link="dvl_link" />
-      <child link="${prefix}_link" />
+      <parent link="${tf_prefix}dvl_link" />
+      <child link="${tf_prefix}${prefix}_link" />
       <!-- +X axis down each DVL beam -->
       <origin xyz="0 0 0" rpy="0 ${radians(67.5)} ${yaw}" />
     </joint>
-    <link name="${prefix}_link" />
+    <link name="${tf_prefix}${prefix}_link" />
   </xacro:macro>
 
   <xacro:dvl_beam prefix="beam0" yaw="${radians(-135)}" />
@@ -103,10 +106,10 @@
   <xacro:dvl_beam prefix="beam3" yaw="${radians(-45)}" />
 
   <joint name="zedm_left_camera_joint" type="fixed">
-    <parent link="base_link" />
-    <child link="zedm_left_camera_frame" />
+    <parent link="${tf_prefix}base_link" />
+    <child link="${tf_prefix}zedm_left_camera_frame" />
     <origin xyz="0 0 0" rpy="${radians(-90)} ${radians(90)} 0" />
   </joint>
-  <link name="zedm_left_camera_frame" />
+  <link name="${tf_prefix}zedm_left_camera_frame" />
 
 </robot>

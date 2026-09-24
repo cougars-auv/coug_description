@@ -15,7 +15,7 @@
  limitations under the License.
 -->
 
-<robot name="wamv" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="wamv" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:arg name="agent_ns" default="wamv1gz" />
   <xacro:property name="agent_ns" value="$(arg agent_ns)" />
@@ -31,7 +31,7 @@
   <xacro:include filename="$(find coug_description)/urdf/wamv_platform.xacro" />
   <xacro:include filename="$(find coug_description)/urdf/sensors.gazebo.xacro" />
 
-  <xacro:wamv_platform prefix="${namespace}/" />
+  <xacro:wamv_platform tf_prefix="${namespace}/" />
 
   <!-- Gazebo plugins -->
   <gazebo>

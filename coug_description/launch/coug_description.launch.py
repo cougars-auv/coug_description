@@ -78,7 +78,7 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Acti
     urdf_filename = agent_launch_params.get("urdf_file", fleet_launch_params.get("urdf_file"))
     urdf_file = os.path.join(coug_description_dir, "urdf", urdf_filename)
 
-    frame_prefix = agent_frame(agent_ns, "")
+    tf_prefix = agent_frame(agent_ns, "")
 
     return [
         Node(
@@ -91,11 +91,10 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Acti
                 scenario_param_file,
                 {
                     "robot_description": ParameterValue(
-                        Command(["xacro ", urdf_file]),
+                        Command(["xacro ", urdf_file, " tf_prefix:=", tf_prefix]),
                         value_type=str,
                     ),
                     "use_sim_time": use_sim_time,
-                    "frame_prefix": frame_prefix,
                 },
             ],
         ),
