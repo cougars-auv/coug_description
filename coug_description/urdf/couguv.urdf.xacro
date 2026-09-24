@@ -82,20 +82,6 @@
     </visual>
   </xacro:macro>
 
-  <xacro:macro name="fin" params="prefix rpy">
-    <joint name="${prefix}_fin_joint" type="revolute">
-      <parent link="${tf_prefix}base_link" />
-      <child link="${tf_prefix}${prefix}_fin_link" />
-      <origin xyz="${-fin_xoff} 0 0" rpy="${rpy}" />
-      <axis xyz="0 0 1" />
-      <limit lower="${radians(-45)}" upper="${radians(45)}" effort="10.0" velocity="1.0" />
-    </joint>
-    <link name="${tf_prefix}${prefix}_fin_link">
-      <xacro:add_box color="White" xyz="${-fin_length/2} 0 ${base_radius+fin_height/2}" rpy="0 0 0"
-        x="${fin_length}" y="${fin_width}" z="${fin_height}" />
-    </link>
-  </xacro:macro>
-
   <!-- Body -->
   <link name="${tf_prefix}base_link" />
 
@@ -169,6 +155,20 @@
   </link>
 
   <!-- Fins -->
+  <xacro:macro name="fin" params="prefix rpy">
+    <joint name="${prefix}_fin_joint" type="revolute">
+      <parent link="${tf_prefix}base_link" />
+      <child link="${tf_prefix}${prefix}_fin_link" />
+      <origin xyz="${-fin_xoff} 0 0" rpy="${rpy}" />
+      <axis xyz="0 0 1" />
+      <limit lower="${radians(-45)}" upper="${radians(45)}" effort="10.0" velocity="1.0" />
+    </joint>
+    <link name="${tf_prefix}${prefix}_fin_link">
+      <xacro:add_box color="White" xyz="${-fin_length/2} 0 ${base_radius+fin_height/2}" rpy="0 0 0"
+        x="${fin_length}" y="${fin_width}" z="${fin_height}" />
+    </link>
+  </xacro:macro>
+
   <xacro:fin prefix="top" rpy="0 0 0" />
   <xacro:fin prefix="left" rpy="${radians(120)} 0 0" />
   <xacro:fin prefix="right" rpy="${radians(-120)} 0 0" />

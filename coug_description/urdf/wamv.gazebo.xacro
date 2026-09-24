@@ -15,7 +15,7 @@
  limitations under the License.
 -->
 
-<robot name="wamv" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="wamv_gazebo" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:arg name="agent_ns" default="wamv1gz" />
   <xacro:property name="agent_ns" value="$(arg agent_ns)" />

@@ -15,7 +15,7 @@
  limitations under the License.
 -->
 
-<robot name="wamv" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="wamv_holoocean" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:arg name="tf_prefix" default="" />
   <xacro:property name="tf_prefix" value="$(arg tf_prefix)" />

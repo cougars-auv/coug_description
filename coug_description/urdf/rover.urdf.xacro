@@ -93,6 +93,14 @@
     </inertial>
   </xacro:macro>
 
+  <!-- TODO: Compare this with the new 2026 URDF -->
+
+  <!-- Chassis -->
+  <link name="${tf_prefix}base_link">
+    <xacro:add_box color="LightGray" mass="${base_mass}" xyz="0 0 0" rpy="0 0 0" x="${base_length}" y="${base_width}" z="${base_height}" />
+  </link>
+
+  <!-- Wheels -->
   <xacro:macro name="wheel" params="prefix xoff y_reflect">
     <joint name="${prefix}_wheel_joint" type="continuous">
       <parent link="${tf_prefix}base_link" />
@@ -107,14 +115,6 @@
     </link>
   </xacro:macro>
 
-  <!-- TODO: Compare this with the new 2026 URDF -->
-
-  <!-- Chassis -->
-  <link name="${tf_prefix}base_link">
-    <xacro:add_box color="LightGray" mass="${base_mass}" xyz="0 0 0" rpy="0 0 0" x="${base_length}" y="${base_width}" z="${base_height}" />
-  </link>
-
-  <!-- Wheels -->
   <xacro:wheel prefix="front_left" xoff="${wheel_xoff}" y_reflect="1" />
   <xacro:wheel prefix="front_right" xoff="${wheel_xoff}" y_reflect="-1" />
   <xacro:wheel prefix="middle_left" xoff="0" y_reflect="1" />
