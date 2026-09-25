@@ -58,8 +58,7 @@
       <inertial>
         <origin xyz="${xyz}" rpy="${rpy}" />
         <mass value="${mass}" />
-        <inertia ixx="${mass*(3*radius*radius + length*length)/12}" ixy="0" ixz="0"
-          iyy="${mass*(3*radius*radius + length*length)/12}" iyz="0" izz="${mass*radius*radius/2}" />
+        <inertia ixx="${mass*(3*radius*radius + length*length)/12}" ixy="0" ixz="0" iyy="${mass*(3*radius*radius + length*length)/12}" iyz="0" izz="${mass*radius*radius/2}" />
       </inertial>
     </xacro:if>
   </xacro:macro>
@@ -101,8 +100,7 @@
   </xacro:macro>
 
   <xacro:macro name="optical_frame" params="name">
-    <xacro:sensor_frame name="${name}_optical" parent="${name}"
-      rpy="${radians(-90)} 0 ${radians(-90)}" />
+    <xacro:sensor_frame name="${name}_optical" parent="${name}" rpy="${radians(-90)} 0 ${radians(-90)}" />
   </xacro:macro>
 
   <xacro:macro name="dvl_beams" params="layout">

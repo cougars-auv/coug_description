@@ -44,8 +44,7 @@
   <xacro:property name="depth_camera_zoff" value="0.05" />
   <xacro:property name="depth_camera_pitch" value="0.1" />
   <!-- Depth camera pose relative to base_link -->
-  <xacro:property name="rover_depth_camera_xyz"
-    value="${base_length/2 + mast_length/2 + depth_camera_xoff} 0 ${mast_height/2 - base_height/2 + depth_camera_zoff}" />
+  <xacro:property name="rover_depth_camera_xyz" value="${base_length/2 + mast_length/2 + depth_camera_xoff} 0 ${mast_height/2 - base_height/2 + depth_camera_zoff}" />
   <xacro:property name="rover_depth_camera_rpy" value="0 ${depth_camera_pitch} 0" />
 
   <material name="LightGray">
@@ -59,8 +58,7 @@
 
   <!-- Chassis -->
   <link name="${tf_prefix}base_link">
-    <xacro:box_shape color="LightGray" x="${base_length}" y="${base_width}" z="${base_height}"
-      mass="${base_mass}" />
+    <xacro:box_shape color="LightGray" x="${base_length}" y="${base_width}" z="${base_height}" mass="${base_mass}" />
   </link>
 
   <!-- Wheels -->
@@ -73,8 +71,7 @@
       <dynamics damping="0.05" friction="0.1" />
     </joint>
     <link name="${tf_prefix}${prefix}_wheel_link">
-      <xacro:cylinder_shape color="DarkGray" radius="${wheel_radius}" length="${wheel_width}"
-        rpy="${radians(90)} 0 0" mass="${wheel_mass}" />
+      <xacro:cylinder_shape color="DarkGray" radius="${wheel_radius}" length="${wheel_width}" rpy="${radians(90)} 0 0" mass="${wheel_mass}" />
     </link>
   </xacro:macro>
 
@@ -88,13 +85,11 @@
   <!-- Mast -->
   <xacro:fixed_joint name="mast" xyz="${base_length/2 + mast_length/2} 0 ${mast_height/2 - base_height/2}" />
   <link name="${tf_prefix}mast_link">
-    <xacro:box_shape color="LightGray" x="${mast_length}" y="${mast_width}" z="${mast_height}"
-      mass="${mast_mass}" />
+    <xacro:box_shape color="LightGray" x="${mast_length}" y="${mast_width}" z="${mast_height}" mass="${mast_mass}" />
   </link>
 
   <!-- Sensors -->
-  <xacro:sensor_frame name="depth_camera" parent="mast" xyz="${depth_camera_xoff} 0 ${depth_camera_zoff}"
-    rpy="${rover_depth_camera_rpy}" />
+  <xacro:sensor_frame name="depth_camera" parent="mast" xyz="${depth_camera_xoff} 0 ${depth_camera_zoff}" rpy="${rover_depth_camera_rpy}" />
   <xacro:optical_frame name="depth_camera" />
   <xacro:sensor_frame name="imu" parent="depth_camera" />
   <xacro:sensor_frame name="gps" xyz="${-base_length/2} 0 ${base_height/2}" />

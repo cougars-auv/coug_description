@@ -54,20 +54,17 @@
 
   <xacro:fixed_joint name="clear_body" />
   <link name="${tf_prefix}clear_body_link">
-    <xacro:cylinder_shape color="Acrylic" radius="${base_radius}" length="${enclosure_length}"
-      rpy="0 ${radians(90)} 0" />
+    <xacro:cylinder_shape color="Acrylic" radius="${base_radius}" length="${enclosure_length}" rpy="0 ${radians(90)} 0" />
   </link>
 
   <xacro:fixed_joint name="front_body" xyz="${(base_length - 2*base_radius - enclosure_length)/4 + enclosure_length/2} 0 0" />
   <link name="${tf_prefix}front_body_link">
-    <xacro:cylinder_shape color="Blue" radius="${base_radius}" length="${(base_length - 2*base_radius - enclosure_length)/2}"
-      rpy="0 ${radians(90)} 0" />
+    <xacro:cylinder_shape color="Blue" radius="${base_radius}" length="${(base_length - 2*base_radius - enclosure_length)/2}" rpy="0 ${radians(90)} 0" />
   </link>
 
   <xacro:fixed_joint name="back_body" xyz="${-((base_length - 2*base_radius - enclosure_length)/4 + enclosure_length/2)} 0 0" />
   <link name="${tf_prefix}back_body_link">
-    <xacro:cylinder_shape color="Blue" radius="${base_radius}" length="${(base_length - 2*base_radius - enclosure_length)/2}"
-      rpy="0 ${radians(90)} 0" />
+    <xacro:cylinder_shape color="Blue" radius="${base_radius}" length="${(base_length - 2*base_radius - enclosure_length)/2}" rpy="0 ${radians(90)} 0" />
   </link>
 
   <!-- Handle -->
@@ -91,8 +88,7 @@
   <!-- Thruster -->
   <xacro:fixed_joint name="thruster" xyz="${-(base_length-2*base_radius)/2} 0 0" />
   <link name="${tf_prefix}thruster_link">
-    <xacro:cylinder_shape color="Gray" radius="${base_radius*0.9}" length="${2*base_radius}"
-      rpy="0 ${radians(90)} 0" />
+    <xacro:cylinder_shape color="Gray" radius="${base_radius*0.9}" length="${2*base_radius}" rpy="0 ${radians(90)} 0" />
   </link>
 
   <!-- Fins -->
@@ -105,8 +101,7 @@
       <limit lower="${radians(-45)}" upper="${radians(45)}" effort="10.0" velocity="1.0" />
     </joint>
     <link name="${tf_prefix}${prefix}_fin_link">
-      <xacro:box_shape color="White" x="${fin_length}" y="${fin_width}" z="${fin_height}"
-        xyz="${-fin_length/2} 0 ${base_radius+fin_height/2}" />
+      <xacro:box_shape color="White" x="${fin_length}" y="${fin_width}" z="${fin_height}" xyz="${-fin_length/2} 0 ${base_radius+fin_height/2}" />
     </link>
   </xacro:macro>
 
