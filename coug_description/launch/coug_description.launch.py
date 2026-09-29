@@ -87,23 +87,6 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Acti
 
     return [
         Node(
-            package="robot_state_publisher",
-            executable="robot_state_publisher",
-            name="robot_state_publisher",
-            parameters=[
-                fleet_param_file,
-                agent_param_file,
-                scenario_param_file,
-                {
-                    "robot_description": ParameterValue(
-                        Command(["xacro ", urdf_file, " tf_prefix:=", tf_prefix]),
-                        value_type=str,
-                    ),
-                    "use_sim_time": use_sim_time,
-                },
-            ],
-        ),
-        Node(
             package="joint_state_publisher",
             executable="joint_state_publisher",
             name="joint_state_publisher",
@@ -118,6 +101,23 @@ def launch_setup(context: LaunchContext, *args: Any, **kwargs: Any) -> list[Acti
                 agent_param_file,
                 scenario_param_file,
                 {"use_sim_time": use_sim_time},
+            ],
+        ),
+        Node(
+            package="robot_state_publisher",
+            executable="robot_state_publisher",
+            name="robot_state_publisher",
+            parameters=[
+                fleet_param_file,
+                agent_param_file,
+                scenario_param_file,
+                {
+                    "robot_description": ParameterValue(
+                        Command(["xacro ", urdf_file, " tf_prefix:=", tf_prefix]),
+                        value_type=str,
+                    ),
+                    "use_sim_time": use_sim_time,
+                },
             ],
         ),
     ]
