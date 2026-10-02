@@ -18,6 +18,10 @@ setup(
             os.path.join("share", package_name, "urdf/meshes/bluerov2"),
             glob("urdf/meshes/bluerov2/*.*"),
         ),
+        (
+            os.path.join("share", package_name, "urdf/meshes/blueboat"),
+            glob("urdf/meshes/blueboat/*.*"),
+        ),
     ],
     zip_safe=True,
     extras_require={
