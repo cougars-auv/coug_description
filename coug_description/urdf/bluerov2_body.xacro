@@ -22,7 +22,7 @@
   <link name="${tf_prefix}base_link">
     <visual>
       <geometry>
-        <mesh filename="package://coug_description/urdf/meshes/bluerov2/bluerov2.dae" scale="0.025 0.025 0.025" />
+        <mesh filename="package://blue_description/meshes/bluerov2_heavy/bluerov2_heavy.dae" scale="0.025 0.025 0.025" />
       </geometry>
     </visual>
   </link>
@@ -33,19 +33,19 @@
       <visual>
         <origin xyz="0 0 0" rpy="${mesh_rpy}" />
         <geometry>
-          <mesh filename="package://coug_description/urdf/meshes/bluerov2/${mesh}" />
+          <mesh filename="package://blue_description/meshes/t200/${mesh}" />
         </geometry>
       </visual>
     </link>
   </xacro:macro>
 
-  <xacro:thruster prefix="thruster1" xyz="0.14 -0.092 0.0" rpy="${radians(-90)} ${radians(90)} ${radians(-45)}" mesh="t200_ccw_prop.dae" mesh_rpy="${radians(-90)} 0 0" />
-  <xacro:thruster prefix="thruster2" xyz="0.14 0.092 0.0" rpy="${radians(-90)} ${radians(90)} ${radians(-135)}" mesh="t200_ccw_prop.dae" mesh_rpy="${radians(-90)} 0 0" />
-  <xacro:thruster prefix="thruster3" xyz="-0.14 -0.092 0.0" rpy="${radians(-90)} ${radians(90)} ${radians(45)}" mesh="t200_cw_prop.dae" mesh_rpy="${radians(90)} 0 0" />
-  <xacro:thruster prefix="thruster4" xyz="-0.14 0.092 0.0" rpy="${radians(-90)} ${radians(90)} ${radians(135)}" mesh="t200_cw_prop.dae" mesh_rpy="${radians(90)} 0 0" />
-  <xacro:thruster prefix="thruster5" xyz="0.118 -0.215 0.064" rpy="0 0 0" mesh="t200_ccw_prop.dae" mesh_rpy="${radians(-90)} 0 ${radians(90)}" />
-  <xacro:thruster prefix="thruster6" xyz="0.118 0.215 0.064" rpy="0 0 0" mesh="t200_cw_prop.dae" mesh_rpy="${radians(90)} 0 ${radians(90)}" />
-  <xacro:thruster prefix="thruster7" xyz="-0.118 -0.215 0.064" rpy="0 0 0" mesh="t200_cw_prop.dae" mesh_rpy="${radians(90)} 0 ${radians(90)}" />
-  <xacro:thruster prefix="thruster8" xyz="-0.118 0.215 0.064" rpy="0 0 0" mesh="t200_ccw_prop.dae" mesh_rpy="${radians(-90)} 0 ${radians(90)}" />
+  <xacro:thruster prefix="thruster1" xyz="0.14 -0.092 0.0" rpy="${radians(-90)} ${radians(90)} ${radians(-45)}" mesh="ccw_prop.dae" mesh_rpy="${radians(-90)} 0 0" />
+  <xacro:thruster prefix="thruster2" xyz="0.14 0.092 0.0" rpy="${radians(-90)} ${radians(90)} ${radians(-135)}" mesh="ccw_prop.dae" mesh_rpy="${radians(-90)} 0 0" />
+  <xacro:thruster prefix="thruster3" xyz="-0.14 -0.092 0.0" rpy="${radians(-90)} ${radians(90)} ${radians(45)}" mesh="cw_prop.dae" mesh_rpy="${radians(90)} 0 0" />
+  <xacro:thruster prefix="thruster4" xyz="-0.14 0.092 0.0" rpy="${radians(-90)} ${radians(90)} ${radians(135)}" mesh="cw_prop.dae" mesh_rpy="${radians(90)} 0 0" />
+  <xacro:thruster prefix="thruster5" xyz="0.118 -0.215 0.064" rpy="0 0 0" mesh="ccw_prop.dae" mesh_rpy="${radians(-90)} 0 ${radians(90)}" />
+  <xacro:thruster prefix="thruster6" xyz="0.118 0.215 0.064" rpy="0 0 0" mesh="cw_prop.dae" mesh_rpy="${radians(90)} 0 ${radians(90)}" />
+  <xacro:thruster prefix="thruster7" xyz="-0.118 -0.215 0.064" rpy="0 0 0" mesh="cw_prop.dae" mesh_rpy="${radians(90)} 0 ${radians(90)}" />
+  <xacro:thruster prefix="thruster8" xyz="-0.118 0.215 0.064" rpy="0 0 0" mesh="ccw_prop.dae" mesh_rpy="${radians(-90)} 0 ${radians(90)}" />
 
 </robot>
