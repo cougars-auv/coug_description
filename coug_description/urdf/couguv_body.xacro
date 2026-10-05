@@ -20,6 +20,7 @@
   <xacro:property name="base_radius" value="0.06" />
   <xacro:property name="base_length" value="1.2" />
   <xacro:property name="enclosure_length" value="0.5" />
+  <xacro:property name="body_length" value="${(base_length - 2*base_radius - enclosure_length)/2}" />
 
   <xacro:property name="handle_height" value="0.07" />
   <xacro:property name="handle_width" value="0.04" />
@@ -29,10 +30,10 @@
   <xacro:property name="tray_width" value="0.05" />
   <xacro:property name="tray_length" value="0.38" />
 
-  <xacro:property name="fin_xoff" value="0.375" />
   <xacro:property name="fin_height" value="0.09" />
   <xacro:property name="fin_width" value="0.015" />
   <xacro:property name="fin_length" value="0.09" />
+  <xacro:property name="fin_xoff" value="0.375" />
 
   <material name="White">
     <color rgba="1 1 1 1" />
@@ -55,14 +56,14 @@
     <xacro:cylinder_shape color="Acrylic" radius="${base_radius}" length="${enclosure_length}" rpy="0 ${radians(90)} 0" />
   </link>
 
-  <xacro:fixed_joint name="front_body" xyz="${(base_length - 2*base_radius - enclosure_length)/4 + enclosure_length/2} 0 0" />
+  <xacro:fixed_joint name="front_body" xyz="${body_length/2 + enclosure_length/2} 0 0" />
   <link name="${tf_prefix}front_body_link">
-    <xacro:cylinder_shape color="Blue" radius="${base_radius}" length="${(base_length - 2*base_radius - enclosure_length)/2}" rpy="0 ${radians(90)} 0" />
+    <xacro:cylinder_shape color="Blue" radius="${base_radius}" length="${body_length}" rpy="0 ${radians(90)} 0" />
   </link>
 
-  <xacro:fixed_joint name="back_body" xyz="${-((base_length - 2*base_radius - enclosure_length)/4 + enclosure_length/2)} 0 0" />
+  <xacro:fixed_joint name="back_body" xyz="${-(body_length/2 + enclosure_length/2)} 0 0" />
   <link name="${tf_prefix}back_body_link">
-    <xacro:cylinder_shape color="Blue" radius="${base_radius}" length="${(base_length - 2*base_radius - enclosure_length)/2}" rpy="0 ${radians(90)} 0" />
+    <xacro:cylinder_shape color="Blue" radius="${base_radius}" length="${body_length}" rpy="0 ${radians(90)} 0" />
   </link>
 
   <!-- Handle -->
@@ -78,13 +79,13 @@
   </link>
 
   <!-- Hull -->
-  <xacro:fixed_joint name="hull" xyz="${(base_length-2*base_radius)/2} 0 0" />
+  <xacro:fixed_joint name="hull" xyz="${base_length/2 - base_radius} 0 0" />
   <link name="${tf_prefix}hull_link">
     <xacro:sphere_shape color="Blue" radius="${base_radius}" />
   </link>
 
   <!-- Thruster -->
-  <xacro:fixed_joint name="thruster" xyz="${-(base_length-2*base_radius)/2} 0 0" />
+  <xacro:fixed_joint name="thruster" xyz="${-(base_length/2 - base_radius)} 0 0" />
   <link name="${tf_prefix}thruster_link">
     <xacro:cylinder_shape color="Gray" radius="${base_radius*0.9}" length="${2*base_radius}" rpy="0 ${radians(90)} 0" />
   </link>
@@ -99,7 +100,7 @@
       <limit lower="${radians(-45)}" upper="${radians(45)}" effort="10.0" velocity="1.0" />
     </joint>
     <link name="${tf_prefix}${prefix}_fin_link">
-      <xacro:box_shape color="White" x="${fin_length}" y="${fin_width}" z="${fin_height}" xyz="${-fin_length/2} 0 ${base_radius+fin_height/2}" />
+      <xacro:box_shape color="White" x="${fin_length}" y="${fin_width}" z="${fin_height}" xyz="${-fin_length/2} 0 ${base_radius + fin_height/2}" />
     </link>
   </xacro:macro>
 
