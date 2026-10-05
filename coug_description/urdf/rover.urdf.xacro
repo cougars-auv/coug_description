@@ -89,9 +89,9 @@
   </link>
 
   <!-- Sensors -->
-  <xacro:sensor_frame name="depth_camera" parent="mast" xyz="${depth_camera_xoff} 0 ${depth_camera_zoff}" rpy="${rover_depth_camera_rpy}" />
-  <xacro:optical_frame name="depth_camera" />
   <xacro:sensor_frame name="imu" parent="depth_camera" />
   <xacro:sensor_frame name="gps" xyz="${-base_length/2} 0 ${base_height/2}" />
+  <xacro:sensor_frame name="depth_camera" parent="mast" xyz="${depth_camera_xoff} 0 ${depth_camera_zoff}" rpy="${rover_depth_camera_rpy}" />
+  <xacro:optical_frame name="depth_camera" />
 
 </robot>

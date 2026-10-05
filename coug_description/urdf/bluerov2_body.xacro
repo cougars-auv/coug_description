@@ -17,8 +17,6 @@
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:include filename="$(find coug_description)/urdf/common.xacro" />
-
   <link name="${tf_prefix}base_link">
     <visual>
       <geometry>

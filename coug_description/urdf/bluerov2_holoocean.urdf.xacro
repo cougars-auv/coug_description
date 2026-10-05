@@ -44,12 +44,12 @@
   <xacro:sensor_frame name="dvl" parent="com" xyz="0 -0.1 -0.1" />
   <xacro:dvl_beams layout="holoocean" />
 
+  <xacro:sensor_frame name="depth_camera" parent="dvl" rpy="0 ${radians(90)} 0" />
+  <xacro:optical_frame name="depth_camera" />
   <xacro:sensor_frame name="front_stereo" parent="dvl" xyz="0.1 0 0" rpy="0 ${radians(90)} 0" />
   <xacro:optical_frame name="front_stereo" />
   <xacro:sensor_frame name="back_stereo" parent="dvl" xyz="-0.1 0 0" rpy="0 ${radians(90)} 0" />
   <xacro:optical_frame name="back_stereo" />
-  <xacro:sensor_frame name="depth_camera" parent="dvl" rpy="0 ${radians(90)} 0" />
-  <xacro:optical_frame name="depth_camera" />
 
   <!-- CameraSocket -->
   <xacro:sensor_frame name="camera" parent="com" xyz="0.21 0 0.06" />

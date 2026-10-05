@@ -20,9 +20,16 @@
   <xacro:arg name="tf_prefix" default="" />
   <xacro:property name="tf_prefix" value="$(arg tf_prefix)" />
 
-  <xacro:include filename="$(find coug_description)/urdf/wamv.urdf.xacro" />
+  <xacro:include filename="$(find coug_description)/urdf/common.xacro" />
+  <xacro:include filename="$(find coug_description)/urdf/wamv_body.xacro" />
 
   <!-- NOTE: These are exact HoloOcean socket locations as of 2.3.0 -->
+
+  <!-- Platform -->
+  <xacro:sensor_frame name="imu" xyz="0.55 0 1.3" />
+  <xacro:sensor_frame name="gps" xyz="0.55 0 1.3" />
+  <xacro:sensor_frame name="depth_camera" xyz="2.0 0 2.0" rpy="0 ${radians(15)} 0" />
+  <xacro:optical_frame name="depth_camera" />
 
   <!-- Payload -->
   <xacro:sensor_frame name="depth" rpy="0 ${radians(90)} 0" />
