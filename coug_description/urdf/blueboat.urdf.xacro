@@ -25,12 +25,16 @@
   <!-- https://discuss.bluerobotics.com/t/blueboat-reference-point/23072 -->
   <xacro:property name="blueboat_mesh_zoff" value="0.188" />
 
-  <xacro:property name="base_height" value="0.4" />
+  <!-- https://bluerobotics.com/store/boat/blueboat/blueboat/ -->
+  <xacro:property name="base_height" value="0.46" />
   <xacro:property name="base_width" value="0.93" />
   <xacro:property name="base_length" value="1.2" />
-  <!-- 14.5 kg dry + 2x 4S Li-ion batteries + sensor payload -->
+  <!-- 14.5 kg dry + 2x 1.163 kg batteries + ~1.2 kg payload
+    https://bluerobotics.com/store/boat/blueboat/blueboat/
+    https://bluerobotics.com/store/comm-control-power/powersupplies-batteries/battery-li-4s-15-6ah/ -->
   <xacro:property name="base_mass" value="18.0" />
 
+  <!-- https://github.com/ArduPilot/SITL_Models/blob/master/Gazebo/models/blueboat/model.sdf -->
   <xacro:property name="thruster_xoff" value="0.488" />
   <xacro:property name="thruster_yoff" value="0.295" />
   <xacro:property name="thruster_zoff" value="${0.272 - blueboat_mesh_zoff}" />
@@ -101,6 +105,7 @@
   <xacro:thruster prefix="right" y_reflect="-1" />
 
   <!-- Sensors -->
+  <!-- https://github.com/bluerobotics/Blueos-Parameter-Repository/blob/master/params/ardupilot/ArduRover/4.7/Navigator/BlueBoat120.params -->
   <xacro:sensor_frame name="imu" xyz="0.16 -0.365 0.12" />
   <xacro:sensor_frame name="gps" xyz="0.16 -0.365 0.22" />
   <xacro:sensor_frame name="depth_camera" xyz="${blueboat_depth_camera_xyz}" rpy="${blueboat_depth_camera_rpy}" />
