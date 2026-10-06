@@ -106,6 +106,7 @@
   <!-- https://github.com/bluerobotics/Blueos-Parameter-Repository/blob/master/params/ardupilot/ArduRover/4.7/Navigator/BlueBoat120.params -->
   <xacro:sensor_frame name="imu" xyz="0.16 -0.365 0.12" />
   <xacro:sensor_frame name="gps" xyz="0.16 -0.365 0.22" />
+  <xacro:sensor_frame name="lidar" xyz="0 0 ${blueboat_mesh_zoff + 0.3}" />
   <xacro:sensor_frame name="depth_camera" xyz="${blueboat_depth_camera_xyz}" rpy="${blueboat_depth_camera_rpy}" />
   <xacro:optical_frame name="depth_camera" />
 
