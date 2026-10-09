@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+ Copyright 2026 BYU FROST Lab
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<robot name="tank" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:arg name="tf_prefix" default="" />
+  <xacro:property name="tf_prefix" value="$(arg tf_prefix)" />
+
+  <xacro:include filename="$(find coug_description)/urdf/common.xacro" />
+  <xacro:include filename="$(find coug_description)/urdf/bluerov2_body.xacro" />
+
+  <!-- Sensors -->
+  <!-- Sensor FRD frame -->
+  <xacro:sensor_frame name="imu" rpy="-1.5811 -0.0175 3.1251" />
+  <xacro:sensor_frame name="depth" />
+
+  <!-- Sensor FLU frame; FRD data converted upstream -->
+  <xacro:sensor_frame name="dvl" xyz="0.0749 0.0912 -0.1408" rpy="0.0328 0.0292 0.0030" />
+  <xacro:dvl_beams layout="a50" />
+
+  <xacro:sensor_frame name="camera" xyz="0.2142 0.0517 0.0941" />
+  <xacro:optical_frame name="camera" />
+
+</robot>
