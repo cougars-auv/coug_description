@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+ Copyright 2026 BYU FROST Lab
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<robot name="couguv" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:arg name="tf_prefix" default="" />
+  <xacro:property name="tf_prefix" value="$(arg tf_prefix)" />
+
+  <xacro:include filename="$(find coug_description)/urdf/common.xacro" />
+  <xacro:include filename="$(find coug_description)/urdf/couguv_body.xacro" />
+
+  <!-- TODO: Update the offsets on these -->
+
+  <!-- Sensors -->
+  <xacro:sensor_frame name="gps" />
+  <xacro:sensor_frame name="depth" xyz="0.162 0 0" />
+
+  <!-- Sensor FLU frame; FRD data converted upstream -->
+  <xacro:sensor_frame name="dvl" xyz="0.504 0 -0.053" />
+  <xacro:dvl_beams layout="a50" />
+
+  <!-- Sensor FLU frame; FRD data converted upstream -->
+  <xacro:sensor_frame name="modem" xyz="0.3785 0 -0.0985" rpy="${radians(180)} 0 0" />
+
+</robot>

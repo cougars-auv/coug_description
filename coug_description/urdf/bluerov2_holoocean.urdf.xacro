@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--
+ Copyright 2026 BYU FROST Lab
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<robot name="bluerov2_holoocean" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:arg name="tf_prefix" default="" />
+  <xacro:property name="tf_prefix" value="$(arg tf_prefix)" />
+
+  <xacro:include filename="$(find coug_description)/urdf/common.xacro" />
+  <xacro:include filename="$(find coug_description)/urdf/bluerov2_body.xacro" />
+
+  <!-- NOTE: These are exact HoloOcean socket locations as of 2.3.0 -->
+
+  <!-- COM -->
+  <xacro:sensor_frame name="com" />
+  <xacro:sensor_frame name="gps" parent="com" />
+
+  <!-- Sensor FLU frame; FRD data converted upstream -->
+  <xacro:sensor_frame name="modem" parent="com" />
+
+  <!-- IMUSocket -->
+  <!-- IMU pitched 180 deg in socket due to robot_localization gravity mishandling bug -->
+  <xacro:sensor_frame name="imu" parent="com" xyz="0.11 0 0.065" />
+
+  <!-- DepthSocket -->
+  <xacro:sensor_frame name="depth" parent="com" xyz="-0.17 0 0.06" />
+
+  <!-- DVLSocket -->
+  <!-- Sensor FLU frame; FRD data converted upstream -->
+  <xacro:sensor_frame name="dvl" parent="com" xyz="0 -0.1 -0.1" />
+  <xacro:dvl_beams layout="holoocean" />
+
+  <xacro:sensor_frame name="depth_camera" parent="dvl" rpy="0 ${radians(90)} 0" />
+  <xacro:optical_frame name="depth_camera" />
+  <xacro:sensor_frame name="front_stereo" parent="dvl" xyz="0.1 0 0" rpy="0 ${radians(90)} 0" />
+  <xacro:optical_frame name="front_stereo" />
+  <xacro:sensor_frame name="back_stereo" parent="dvl" xyz="-0.1 0 0" rpy="0 ${radians(90)} 0" />
+  <xacro:optical_frame name="back_stereo" />
+
+  <!-- CameraSocket -->
+  <xacro:sensor_frame name="camera" parent="com" xyz="0.21 0 0.06" />
+
+  <!-- SonarSocket -->
+  <xacro:sensor_frame name="sonar" parent="com" xyz="0.15 0 0.14" />
+
+</robot>
